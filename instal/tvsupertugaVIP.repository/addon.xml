@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="tvsupertugaVIP.repository" name="[COLOR red][B]VIP[/B][/COLOR] [COLOR white][B]TVsupertuga Repository[/B][/COLOR]" version="0.2" provider-name="TVsupertuga">
+	<extension point="xbmc.addon.repository" name="tvsupertugaVIP repository">
+		<info compressed="false">http://tvsupertuga.x10.bz/tvsupertugaVIP.repository/addons.xml</info>
+		<checksum>http://tvsupertuga.x10.bz/tvsupertugaVIP.repository/addons.xml.md5</checksum>
+		<datadir zip="true">http://tvsupertuga.x10.bz/tvsupertugaVIP.repository/instal/</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Equipe tvsupertuga</summary>
+		<description>tvsupertugaVIP Repository</description>
+		<disclaimer></disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
