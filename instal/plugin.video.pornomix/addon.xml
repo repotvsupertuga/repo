@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.video.pornomix"
+  version="0.1"
+  name="[COLOR deeppink]Porno[/COLOR] [COLOR yellow]Mix[/COLOR]"
+  provider-name="Team TVsupertuga">
+  <requires>
+   <import addon="xbmc.python" version="2.1.0"/>
+   <import addon="script.module.simplejson" version="3.3.0"/>    
+   <import addon="xbmc.python" version="2.1.0"/>    
+   <import addon="script.module.t0mm0.common" version="2.1.1"/>    
+   <import addon="plugin.video.youtube" version="3.0.0"/>    
+   <import addon="script.module.urlresolver"  version="3.0.14"/>   
+   <import addon="script.common.plugin.cache" version="2.5.8"/>    
+   <import addon="script.module.metahandler" version="2.9.0"/> 
+  </requires>
+  <extension 
+    point="xbmc.python.pluginsource"
+    library="default.py">
+   <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>[COLOR mistyrose]Play videos from different adult streaming sites[/COLOR]</summary>
+    <description>[COLOR yellow]Este addon reproduz vídeos de YouPorn, Tube8, Boysfood, MoviesAnd, PornoTube, xHamster, KeezMovies e alguns outros sites adultos streaming. Contém material adulto explícito. Você só pode ver este addon se você tiver pelo menos 18 anos de idade, ou pelo menos a idade de maioria na jurisdição onde você reside ou a partir do qual você acessa este conteúdo. Se você não atender a esses requisitos, então você não tem permissão para usar este addon.[/COLOR]</description>
+    <disclaimer>[COLOR deeppink]Assista a partir de uma enorme selecção de [COLOR red]XXX[/COLOR] Créditos de Coleções para a Lambda para alguns resolvers usados neste addon
+Créditos também vai para schisM para o código usado neste addon.O autor não hospeda nem distribui qualquer conteúdo exibido por este add-on.[/COLOR]</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>
