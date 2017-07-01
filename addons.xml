@@ -184,6 +184,7 @@ CrÃ©ditos tambÃ©m vai para schisM para o cÃ³digo usado neste addon.O autor
        provider-name="TVsupertuga">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.livetv" version="0.1"/>
 	<import addon="script.module.t0mm0.common" version="2.0.0"/>
     <import addon="script.module.beautifulsoup" version="3.2.1"/>
     <import addon="script.module.simple.downloader" version="0.9.4"/>
