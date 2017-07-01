@@ -197,7 +197,6 @@ CrÃ©ditos tambÃ©m vai para schisM para o cÃ³digo usado neste addon.O autor
     <import addon="script.module.simplejson" />
     <import addon="script.common.plugin.cache" version="2.5.2"/>
     <import addon="script.module.metahandler" version="2.5.1"/>
-    <import addon="script.module.livetv" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>all</provides>
