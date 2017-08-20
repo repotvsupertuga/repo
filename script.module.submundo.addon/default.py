@@ -52,7 +52,7 @@ history = os.path.join(profile, 'history')
 REV = os.path.join(profile, 'list_revision')
 icon = os.path.join(home, 'icon.png')
 FANART = os.path.join(home, 'fanart.jpg')
-source_file = os.path.join(home, 'source_file')
+source_file = os.path.join(home, 'resolvers.py')
 functions_dir = profile
 
 communityfiles = os.path.join(profile, 'LivewebTV')
@@ -61,14 +61,14 @@ debug = addon.getSetting('debug')
 if os.path.exists(favorites)==True:
     FAV = open(favorites).read()
 else: FAV = []
-if os.path.exists(source_file)==True:
-    SOURCES = open(source_file).read()
+if os.path.exists(source_file)==False:
+    SOURCES = open(resolvers.py).read()
 else: SOURCES = []
 
 
 def addon_log(string):
     if debug == 'true':
-        xbmc.log("[addon.666-IPTV-%s]: %s" %(addon_version, string))
+        xbmc.log("[addon.submundoIPTV-%s]: %s" %(addon_version, string))
 
 
 def makeRequest(url, headers=None):
@@ -100,11 +100,11 @@ def makeRequest(url, headers=None):
             addon_log('URL: '+url)
             if hasattr(e, 'code'):
                 addon_log('We failed with error code - %s.' % e.code)
-                xbmc.executebuiltin("XBMC.Notification(666-IPTV,We failed with error code - "+str(e.code)+",10000,"+icon+")")
+                xbmc.executebuiltin("XBMC.Notification(submundoIPTV,We failed with error code - "+str(e.code)+",10000,"+icon+")")
             elif hasattr(e, 'reason'):
                 addon_log('We failed to reach a server.')
                 addon_log('Reason: %s' %e.reason)
-                xbmc.executebuiltin("XBMC.Notification(666-IPTV,We failed to reach a server. - "+str(e.reason)+",10000,"+icon+")")
+                xbmc.executebuiltin("XBMC.Notification(submundoIPTV,We failed to reach a server. - "+str(e.reason)+",10000,"+icon+")")
 
 def getSources():
         try:
@@ -211,21 +211,21 @@ def addSource(url=None):
             source_media['url'] = source_url
             source_media['fanart'] = fanart
 
-        if os.path.exists(source_file)==False:
+        if os.path.exists(resolvers.py)==False:
             source_list = []
             source_list.append(source_media)
-            b = open(source_file,"w")
+            b = open(resolvers.py,"w")
             b.write(json.dumps(source_list))
             b.close()
         else:
-            sources = json.loads(open(source_file,"r").read())
+            sources = json.loads(open(resolvers.py,"r").read())
             sources.append(source_media)
-            b = open(source_file,"w")
+            b = open(resolvers.py,"w")
             b.write(json.dumps(sources))
             b.close()
         addon.setSetting('new_url_source', "")
         addon.setSetting('new_file_source', "")
-        xbmc.executebuiltin("XBMC.Notification(666-IPTV,New source added.,5000,"+icon+")")
+        xbmc.executebuiltin("XBMC.Notification(submundoIPTV,New source added.,5000,"+icon+")")
         if not url is None:
             if 'xbmcplus.xb.funpic.de' in url:
                 xbmc.executebuiltin("XBMC.Container.Update(%s?mode=14,replace)" %sys.argv[0])
@@ -234,19 +234,19 @@ def addSource(url=None):
         else: addon.openSettings()
 
 def rmSource(name):
-        sources = json.loads(open(source_file,"r").read())
+        sources = json.loads(open(resolvers.py,"r").read())
         for index in range(len(sources)):
             if isinstance(sources[index], list):
                 if sources[index][0] == name:
                     del sources[index]
-                    b = open(source_file,"w")
+                    b = open(resolvers.py,"w")
                     b.write(json.dumps(sources))
                     b.close()
                     break
             else:
                 if sources[index]['title'] == name:
                     del sources[index]
-                    b = open(source_file,"w")
+                    b = open(resolvers.py,"w")
                     b.write(json.dumps(sources))
                     b.close()
                     break
@@ -270,7 +270,7 @@ def get_xml_database(url, browse=False):
                         if browse:
                             addDir(name,url+href,1,icon,fanart,'','','','','download')
                         else:
-                            if os.path.exists(source_file)==True:
+                            if os.path.exists(resolvers.py)==True:
                                 if name in SOURCES:
                                     addDir(name+' (in use)',url+href,11,icon,fanart,'','','','','download')
                                 else:
@@ -2188,7 +2188,7 @@ def urlsolver(url):
         else:
             resolver = resolved
     else:
-        xbmc.executebuiltin("XBMC.Notification(666-IPTV,Urlresolver donot support this domain. - ,5000)")
+        xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Urlresolver donot support this domain. - ,5000)")
         resolver=url
     return resolver
 def tryplay(url,listitem,pdialogue=None):    
@@ -2374,12 +2374,12 @@ def play_playlist(name, mu_playlist,queueVideo=None):
 
 def download_file(name, url):
         if addon.getSetting('save_location') == "":
-            xbmc.executebuiltin("XBMC.Notification('666-IPTV','Choose a location to save files.',15000,"+icon+")")
+            xbmc.executebuiltin("XBMC.Notification('submundoIPTV','Choose a location to save files.',15000,"+icon+")")
             addon.openSettings()
         params = {'url': url, 'download_path': addon.getSetting('save_location')}
         downloader.download(name, params)
         dialog = xbmcgui.Dialog()
-        ret = dialog.yesno('666-IPTV', 'Do you want to add this file as a source?')
+        ret = dialog.yesno('submundoIPTV', 'Do you want to add this file as a source?')
         if ret:
             addSource(os.path.join(addon.getSetting('save_location'), name))
 
@@ -2450,7 +2450,7 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,credits,showcon
                 contextMenu.append(('Download','XBMC.RunPlugin(%s?url=%s&mode=9&name=%s)'
                                     %(sys.argv[0], urllib.quote_plus(url), urllib.quote_plus(name))))
             elif showcontext == 'fav':
-                contextMenu.append(('Remove from 666-IPTV Favorites','XBMC.RunPlugin(%s?mode=6&name=%s)'
+                contextMenu.append(('Remove from submundoIPTV Favorites','XBMC.RunPlugin(%s?mode=6&name=%s)'
                                     %(sys.argv[0], urllib.quote_plus(name))))
             if showcontext == '!!update':
                 fav_params2 = (
@@ -2459,7 +2459,7 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,credits,showcon
                     )
                 contextMenu.append(('[COLOR yellow]!!update[/COLOR]','XBMC.RunPlugin(%s)' %fav_params2))
             if not name in FAV:
-                contextMenu.append(('Add to 666-IPTV Favorites','XBMC.RunPlugin(%s?mode=5&name=%s&url=%s&iconimage=%s&fanart=%s&fav_mode=%s)'
+                contextMenu.append(('Add to submundoIPTV Favorites','XBMC.RunPlugin(%s?mode=5&name=%s&url=%s&iconimage=%s&fanart=%s&fav_mode=%s)'
                          %(sys.argv[0], urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(iconimage), urllib.quote_plus(fanart), mode)))
             liz.addContextMenuItems(contextMenu)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
@@ -2639,7 +2639,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext,playlis
             #contextMenu = []
             if showcontext == 'fav':
                 contextMenu.append(
-                    ('Remove from 666-IPTV Favorites','XBMC.RunPlugin(%s?mode=6&name=%s)'
+                    ('Remove from submundoIPTV Favorites','XBMC.RunPlugin(%s?mode=6&name=%s)'
                      %(sys.argv[0], urllib.quote_plus(name)))
                      )
             elif not name in FAV:
@@ -2657,7 +2657,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext,playlis
                     fav_params += 'playlist='+urllib.quote_plus(str(playlist).replace(',','||'))
                 if regexs:
                     fav_params += "&regexs="+regexs
-                contextMenu.append(('Add to 666-IPTV Favorites','XBMC.RunPlugin(%s)' %fav_params))
+                contextMenu.append(('Add to submundoIPTV Favorites','XBMC.RunPlugin(%s)' %fav_params))
             liz.addContextMenuItems(contextMenu)
         if not playlist is None:
             if addon.getSetting('add_playlist') == "false":
@@ -3094,17 +3094,17 @@ elif mode==17 or mode==117:
             else:
                 playsetresolved(url,name,iconimage,setresolved,regexs)
         else:
-            xbmc.executebuiltin("XBMC.Notification(666-IPTV,Failed to extract regex. - "+"this"+",4000,"+icon+")")
+            xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Failed to extract regex. - "+"this"+",4000,"+icon+")")
 elif mode==18:
     addon_log("youtubedl")
     try:
         import youtubedl
     except Exception:
-        xbmc.executebuiltin("XBMC.Notification(666-IPTV,Please [COLOR yellow]install Youtube-dl[/COLOR] module ,10000,"")")
+        xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Please [COLOR yellow]install Youtube-dl[/COLOR] module ,10000,"")")
     stream_url=youtubedl.single_YD(url)
     playsetresolved(stream_url,name,iconimage)
 elif mode==19:
-    addon_log("Genesiscommonresolvers")
+    addon_log("Genesiscommonresolvers.py")
     playsetresolved (urlsolver(url),name,iconimage,True)
 
 elif mode==21:
@@ -3129,14 +3129,14 @@ elif mode==55:
         newStr = keyboard.getText()
         if newStr==parentalblockedpin:
             addon.setSetting('parentalblocked', "false")
-            xbmc.executebuiltin("XBMC.Notification(666-IPTV,Parental Block Disabled,5000,"+icon+")")
+            xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Parental Block Disabled,5000,"+icon+")")
         else:
-            xbmc.executebuiltin("XBMC.Notification(666-IPTV,Wrong Pin??,5000,"+icon+")")
+            xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Wrong Pin??,5000,"+icon+")")
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 elif mode==56:
     addon_log("disable lock")
     addon.setSetting('parentalblocked', "true")
-    xbmc.executebuiltin("XBMC.Notification(666-IPTV,Parental block enabled,5000,"+icon+")")
+    xbmc.executebuiltin("XBMC.Notification(submundoIPTV,Parental block enabled,5000,"+icon+")")
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode==53:

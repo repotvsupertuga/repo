@@ -26,7 +26,7 @@
     <platform>all</platform>
     <summary lang="en">Veja as capas dos jornais no Kodi</summary>
     <description>
-      Veja as capas dos principais jornais diariamente no Kodi. As capas sÃ£o retiradas do site banca sapo. Para suporte visite o forum oficial forum.kodi.tv ou forum.aminhacasadigital.com
+      Veja as capas dos principais jornais diariamente no Kodi. As capas são retiradas do site banca sapo. Para suporte visite o forum oficial forum.kodi.tv ou forum.aminhacasadigital.com
     </description>
     <license>GPL 2.0</license>
   </extension>
@@ -68,7 +68,7 @@
   <extension point="xbmc.service" library="service.py" start="startup" />
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>ManutenÃ§Ã£o</summary>
+    <summary>Manutenção</summary>
     <description>Sua ferramenta para limpar seu dispositivo.</description>
     <language></language>
     <license></license>
@@ -144,9 +144,9 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>[COLOR mistyrose]Play videos from different adult streaming sites[/COLOR]</summary>
-    <description>[COLOR yellow]Este addon reproduz vÃ­deos de YouPorn, Tube8, Boysfood, MoviesAnd, PornoTube, xHamster, KeezMovies e alguns outros sites adultos streaming. ContÃ©m material adulto explÃ­cito. VocÃª sÃ³ pode ver este addon se vocÃª tiver pelo menos 18 anos de idade, ou pelo menos a idade de maioria na jurisdiÃ§Ã£o onde vocÃª reside ou a partir do qual vocÃª acessa este conteÃºdo. Se vocÃª nÃ£o atender a esses requisitos, entÃ£o vocÃª nÃ£o tem permissÃ£o para usar este addon.[/COLOR]</description>
-    <disclaimer>[COLOR deeppink]Assista a partir de uma enorme selecÃ§Ã£o de [COLOR red]XXX[/COLOR] CrÃ©ditos de ColeÃ§Ãµes para a Lambda para alguns resolvers usados neste addon
-CrÃ©ditos tambÃ©m vai para schisM para o cÃ³digo usado neste addon.O autor nÃ£o hospeda nem distribui qualquer conteÃºdo exibido por este add-on.[/COLOR]</disclaimer>
+    <description>[COLOR yellow]Este addon reproduz vídeos de YouPorn, Tube8, Boysfood, MoviesAnd, PornoTube, xHamster, KeezMovies e alguns outros sites adultos streaming. Contém material adulto explícito. Você só pode ver este addon se você tiver pelo menos 18 anos de idade, ou pelo menos a idade de maioria na jurisdição onde você reside ou a partir do qual você acessa este conteúdo. Se você não atender a esses requisitos, então você não tem permissão para usar este addon.[/COLOR]</description>
+    <disclaimer>[COLOR deeppink]Assista a partir de uma enorme selecção de [COLOR red]XXX[/COLOR] Créditos de Coleções para a Lambda para alguns resolvers usados neste addon
+Créditos também vai para schisM para o código usado neste addon.O autor não hospeda nem distribui qualquer conteúdo exibido por este add-on.[/COLOR]</disclaimer>
     <platform>all</platform>
   </extension>
 </addon>
@@ -175,36 +175,6 @@ CrÃ©ditos tambÃ©m vai para schisM para o cÃ³digo usado neste addon.O autor
     <website></website>
     <facebookgrupo>https://www.facebook.com/TVsupertuga.PT/</facebookgrupo>
     <email>tvsupertuga@gmail.com</email>
-  </extension>
-</addon>
-
-<addon id="plugin.video.submundo"
-       name="[COLOR red][B]TV[/B][/COLOR] [COLOR white][B]Sub[/B][/COLOR][COLOR red][B]Mundo[/B][/COLOR]"
-       version="0.1"
-       provider-name="TVsupertuga">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-	<import addon="script.module.t0mm0.common" version="2.0.0"/>
-    <import addon="script.module.beautifulsoup" version="3.2.1"/>
-    <import addon="script.module.simple.downloader" version="0.9.4"/>
-    <import addon="script.module.beautifulsoup4" />
-    <import addon="script.module.simple.downloader" version="0.9.4"/>
-    <import addon="script.module.requests" />
-    <import addon="script.module.httplib2" />
-    <import addon="script.module.youtube.dl" optional="true"/>
-    <import addon="plugin.video.youtube" version="3.0.0"/>
-    <import addon="script.module.urlresolver" optional="true"/>
-    <import addon="script.module.simplejson" />
-    <import addon="script.common.plugin.cache" version="2.5.2"/>
-    <import addon="script.module.metahandler" version="2.5.1"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>all</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="pt">Agenda de Eventos Televisivos</summary>
-    <description lang="pt">Listas com canais onde passam eventos de varias Tematicas</description>
-    <platform>all</platform>
   </extension>
 </addon>
 
@@ -252,6 +222,45 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 	</extension>
 </addon>
 
+<addon id="plugin.video.youtube" name="YouTube" version="5.2.1" provider-name="h0d3nt3uf3l, jdf76, bromix">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+        <summary lang="en">Plugin for YouTube</summary>
+        <description lang="en">YouTube is one of the biggest video-sharing websites of the world.</description>
+		<summary lang="de">Plugin für YouTube</summary>
+        <description lang="de">YouTube ist eines der größten Video-Sharing-Websites der Welt.</description>
+        <summary lang="pl">Wtyczka YouTube</summary>
+        <description lang="pl">YouTube jest jednym z największych na świecie serwisów udostępniania wideo.</description>
+		<summary lang="hu">Kiegészítő  a YouTube-hoz</summary>
+        <description lang="hu">A YouTube világ egyik legnagyobb videómegosztó weboldala.</description>
+        <summary lang="es">Plugin para YouTube</summary>
+        <description lang="es">YouTube es un uno de los mayores sitios web de intercambio de vídeos del mundo.</description>
+        <summary lang="ru">Видеодополнение YouTube</summary>
+        <description lang="ru">Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте.</description>
+        <summary lang="fr">Plugin pour YouTube</summary>
+        <description lang="fr">YouTube est l'un des plus grands sites de partage vidéos du monde.</description>
+        <summary lang="zh">YouTube附加元件</summary>
+        <description lang="zh">「Youtube」是全世界最大的影片分享網站</description>
+        <summary lang="bg">Добавка за YouTube</summary>
+        <description lang="bg">YouTube е един от най-големите уеб сайтове за споделяне на видео в целия свят.</description>
+		<summary lang="el">Πρόσθετο YouTube</summary>
+        <description lang="el">Το YouTube είναι μία από τις μεγαλύτερες ιστοσελίδες διαμοιρασμού βίντεο στον κόσμο.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language></language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://forum.kodi.tv/showthread.php?tid=267160</forum>
+		<website>http://www.youtube.com</website>
+		<email>ytplugin at datanet dot ws</email>
+		<source>https://github.com/Kolifanes/plugin.video.youtube</source>
+	</extension>
+</addon>
+
 <addon id="plugin.video.zen" version="1.8.4" name=" Zen" provider-name="Zen">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0" />
@@ -267,7 +276,7 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Zen Movies/TV Shows</summary>
-		<description lang="en">Watch Movies and TV Shows in High quality! Please note that this addon is not an official part of the Kodi media player , and therefore not to be mentioned within official support channels, this addon has nothing to do with the media player itself, nor itâ€™s intended use, it is simply a third party plugin which has been added to your system.</description>
+		<description lang="en">Watch Movies and TV Shows in High quality! Please note that this addon is not an official part of the Kodi media player , and therefore not to be mentioned within official support channels, this addon has nothing to do with the media player itself, nor it’s intended use, it is simply a third party plugin which has been added to your system.</description>
 		<disclaimer lang="en">The Author does not host or share any content, nor is affiliated with the content providers.</disclaimer>
 		<platform>all</platform>
 		<website>http://schism-tv.net</website>
@@ -335,7 +344,7 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 <addon id="script.module.dateutil"
        name="dateutil"
        version="2.4.2"
-       provider-name="Gustavo Niemeyer, Tomi PievilÃ¤inen, Yaron de Leeuw, Razzeee">
+       provider-name="Gustavo Niemeyer, Tomi Pieviläinen, Yaron de Leeuw, Razzeee">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.six" version="1.9.0"/>
@@ -476,8 +485,8 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 
 <addon id="script.module.submundo.addon"
        name="[COLOR red][B]TV[/B][/COLOR] [COLOR white][B]Sub[/B][/COLOR][COLOR red][B]Mundo[/B][/COLOR]"
-       version="0.2"
-       provider-name="TVsupertuga">
+       version="0.3"
+       provider-name="TeAm TVsupertuga">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.t0mm0.common" version="2.0.0"/>
