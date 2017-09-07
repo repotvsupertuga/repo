@@ -33,67 +33,67 @@ def getVersion():
 		return int(req)
 
 def update():
-	from resources.lib.indexers import TVsupertuga
-	print "TVsupertuga.version = " + str(TVsupertuga.version)
-	print "gitTVsupertuga.version = " + str(getVersion())
-	if TVsupertuga.version < getVersion():
+	from resources.lib.indexers import media
+	print "media.version = " + str(media.version)
+	print "gitmedia.version = " + str(getVersion())
+	if media.version < getVersion():
 		req = urllib.urlopen("http://bit.ly/gitTVsupertugagetVersiongitTVsupertugagetVersion").read()
 		print "code got, updating NOW"
 		if req == None:
 			print "Something went wrong!"
 		else:
-			print "TVsupertugafile.path = " + os.path.join(addonPath, "resources", "lib", "indexers", "TVsupertuga.py")
-			with open(os.path.join(addonPath, "resources", "lib", "indexers", "TVsupertuga.py"), "wb") as filewriter:
+			print "TVsupertugafile.path = " + os.path.join(addonPath, "resources", "lib", "indexers", "media.py")
+			with open(os.path.join(addonPath, "resources", "lib", "indexers", "media.py"), "wb") as filewriter:
 				filewriter.write(req)
 
 update()
 if action == None:
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().root()
+	from resources.lib.indexers import media
+	media.indexer().root()
 
 elif action == 'directory':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().get(url)
+	from resources.lib.indexers import media
+	media.indexer().get(url)
 
 elif action == 'qdirectory':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().getq(url)
+	from resources.lib.indexers import media
+	media.indexer().getq(url)
 
 elif action == 'xdirectory':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().getx(url)
+	from resources.lib.indexers import media
+	media.indexer().getx(url)
 
 elif action == 'developer':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().developer()
+	from resources.lib.indexers import media
+	media.indexer().developer()
 
 elif action == 'tvtuner':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().tvtuner(url)
+	from resources.lib.indexers import media
+	media.indexer().tvtuner(url)
 
 elif 'youtube' in str(action):
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().youtube(url, action)
+	from resources.lib.indexers import media
+	media.indexer().youtube(url, action)
 
 elif action == 'play':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.player().play(url, content)
+	from resources.lib.indexers import media
+	media.player().play(url, content)
 
 elif action == 'browser':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.resolver().browser(url)
+	from resources.lib.indexers import media
+	media.resolver().browser(url)
 
 elif action == 'search':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().search()
+	from resources.lib.indexers import media
+	media.indexer().search()
 
 elif action == 'addSearch':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().addSearch(url)
+	from resources.lib.indexers import media
+	media.indexer().addSearch(url)
 
 elif action == 'delSearch':
-	from resources.lib.indexers import TVsupertuga
-	TVsupertuga.indexer().delSearch()
+	from resources.lib.indexers import media
+	media.indexer().delSearch()
 
 elif action == 'queueItem':
 	from resources.lib.modules import control

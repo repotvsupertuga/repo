@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.media3d" 
+       name="Media" 
+	   version="0.1" 
+	   provider-name="TVsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.addon.common" />
+	<import addon="script.module.requests" />
+	<import addon="script.module.urlresolver" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pt">Dependency For TVsupertuga</summary>
+    <description lang="pt">Dependency For TVsupertuga</description>
+	<disclaimer lang="pt">Dependency For TVsupertuga</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -178,7 +178,41 @@ Créditos também vai para schisM para o código usado neste addon.O autor não 
   </extension>
 </addon>
 
-<addon id="plugin.video.TVsupertuga" version="0.0.8" name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR]" provider-name="TVsupertuga">
+<addon
+  id="plugin.video.SportsDevil"
+  version="2017.09.02"
+  name="SportsDevil"
+  provider-name="SportsDevil">
+  <requires>
+   <import addon="xbmc.python" version="2.14.0"/>
+   <import addon="script.module.dateutil" />
+   <import addon="script.module.simplejson" />
+   <import addon="script.module.six" />
+   <import addon="script.module.requests" />
+   <import addon="script.module.livestreamer" />
+   <!-- <import addon="script.video.F4mProxy" /> -->
+   <!-- <import addon="plugin.video.f4mTester" /> -->
+  </requires>
+  <extension
+    point="xbmc.python.pluginsource"
+    library="default.py">
+   <provides>video</provides>
+  </extension>
+  <extension point="xbmc.service" library="service/proxy_service.py" start="startup" />
+  <extension point="xbmc.addon.metadata">
+    <summary>Play videos of different ad-financed sports streaming sites</summary>
+    <description>Play videos of different ad-financed sports streaming sites.
+
+SportsDevil does not provide any streams of its own; stream quality, content and copyright are responsibility of the ad-financed source web site.
+
+For updates check the readme.
+    </description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <platform>all</platform>
+  </extension>
+</addon>
+
+<addon id="plugin.video.TVsupertuga" version="0.0.9" name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR]" provider-name="TVsupertuga">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="tvsupertuga.repository" version="0.0.6"/>
@@ -189,15 +223,15 @@ Créditos também vai para schisM para o código usado neste addon.O autor não 
 		<import addon="script.module.liveresolver" version="0.1.24"/>
 		<import addon="script.video.F4mProxy" version="2.8.6"/>
 		<import addon="repository.TVsupertugamovies" version="0.1"/>
-		<import addon="script.module.TVsupertuga" version="0.0.2"/>
+		<import addon="script.module.TVsupertuga" version="0.0.3"/>
 		<import addon="script.module.adryan.addon" version="0.3"/>
-	    <import addon="plugin.program.tvsupertuga.notifications" version="0.0.1"/>
-		<import addon="script.module.amerikano.addon" version="0.1"/>
+	    <import addon="script.module.livetv" version="0.1"/>
+		<import addon="script.module.media3d" version="0.1"/>
 		<import addon="script.module.live.sports.addon" version="0.4"/>
 		<import addon="script.module.livetv.addon" version="1.3"/>
 		<import addon="script.module.loganaddon.addon" version="0.1"/>
 		<import addon="script.module.schism.addon" version="2.1"/>
-		<import addon="script.module.stallion.addon" version="0.1"/>
+		<import addon="plugin.video.SportsDevil" version="2017.09.02"/>
 		<import addon="script.module.vod.tvsupertuga.addon" version="0.3"/>
 		<import addon="script.module.stream.tvsupertuga.addon" version="0.1"/>
 	</requires>
@@ -383,6 +417,27 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
    </extension>
 </addon>
 
+<addon id="script.module.media3d"
+       name="Media"
+	   version="0.1"
+	   provider-name="TVsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.addon.common" />
+	<import addon="script.module.requests" />
+	<import addon="script.module.urlresolver" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pt">Dependency For TVsupertuga</summary>
+    <description lang="pt">Dependency For TVsupertuga</description>
+	<disclaimer lang="pt">Dependency For TVsupertuga</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>
+
 <addon id="script.module.metahandler"
      name="metahandler"
      version="2.9.1"
@@ -509,6 +564,25 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
   <extension point="xbmc.addon.metadata">
     <summary lang="pt">Agenda de Eventos Televisivos</summary>
     <description lang="pt">Listas com canais onde passam eventos de varias Tematicas</description>
+    <platform>all</platform>
+  </extension>
+</addon>
+
+<addon id="script.module.TVsupertuga" name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR]" version="0.0.3" provider-name="TVsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.requests" />
+	<import addon="script.module.urlresolver" />
+    <import addon="script.module.beautifulsoup4" />
+	<import addon="script.video.F4mProxy" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pt">Dependency For TVsupertuga</summary>
+    <description lang="pt">Dependency For TVsupertuga</description>
+	<disclaimer lang="pt">Dependency For TVsupertuga</disclaimer>
     <platform>all</platform>
   </extension>
 </addon>

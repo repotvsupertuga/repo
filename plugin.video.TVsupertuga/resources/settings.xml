@@ -1,4 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+	<category label="project apocalypse-login">
+		<setting id="Username" type="text" label="Username-TVsupertuga" default=""/>
+		<setting id="Password" type="text" label="Password-TVsupertuga" default=""/>
+		<setting type="lsep" label="" />
+		<setting id="Username" type="text" label="Username-Logan" default=""/>
+		<setting id="Password" type="text" label="Password-Logan" default=""/>
+		<setting type="lsep" label="" />		
+		<setting id="Username" type="text" label="Username-Geek Tuga Iptv" default=""/>
+		<setting id="Password" type="text" label="Password-Geek Tuga Iptv" default=""/>	
+		<setting type="lsep" label="" />		
+		<setting id="startupd" type="enum" label="Startup Notification" lvalues="None|Dialog|Notification" default="2" />
+	</category>
  <category label="General">
     <setting id="save_location" type="folder"  label="Select a download location." default=""/>
     <setting id="use_thumb" type="bool" label="Use Thumbnails as Fanart" default="true" />
@@ -35,4 +48,3 @@
 	</category>
 
 </settings>
-
