@@ -440,8 +440,8 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 
 <addon id="script.module.metahandler"
      name="metahandler"
-     version="2.9.1"
-     provider-name="Eldorado">
+     version="3.0.2"
+     provider-name="Eldorado, jsergio">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.simplejson" version="3.3.0"/>
@@ -451,7 +451,7 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
   <extension point="xbmc.python.module" library="lib" />
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Downloads Artwork for TV shows, Movies and Music videos for addons and stores them in a local SQLITE database</summary>
-    <description lang="en">Queries, stores, and returns metadata for TV shows, Movies and Musicvideos. [CR]Sources:[CR]www.thetvdb.com[CR]www.themoviedb.org[CR]www.imdb.com</description>
+    <description lang="en">Queries, stores, and returns metadata for TV shows, Movies and Musicvideos. [CR]Sources:[CR]www.thetvdb.com[CR]www.themoviedb.org[CR]www.imdb.com[CR]www.omdbapi.com[CR]This product uses the TMDb API but is not endorsed or certified by TMDb.</description>
     <disclaimer lang="en"></disclaimer>
     <language></language>
     <platform>all</platform>
@@ -460,6 +460,38 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
     <website></website>
     <email></email>
     <source></source>
+  </extension>
+</addon>
+
+<addon id="script.module.mikafilmes.addon"
+       name="MIKA FILMES"
+       version="2.0"
+       provider-name="MIKAEL ALVES">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.t0mm0.common" version="2.0.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.beautifulsoup4"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.httplib2" />
+    <import addon="script.module.youtube.dl" optional="true"/>
+    <import addon="plugin.video.youtube" version="3.0.0"/>
+    <import addon="script.module.urlresolver"/>
+    <import addon="script.module.simplejson" />
+    <import addon="script.common.plugin.cache" version="2.5.2"/>
+    <import addon="script.module.metahandler" version="2.5.1"/>
+	<import addon="script.module.livestreamer" optional="true"/>
+
+   </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Add-on de Filmes</summary>
+    <description lang="en">Filmes Organizados Por Categorias</description>
+	<platform>all</platform>
   </extension>
 </addon>
 
@@ -538,6 +570,37 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
   </extension>
 </addon>
 
+<addon id="script.module.stream.tvsupertuga.addon" version="0.1" name="Stream TVsupertuga" provider-name="TVsupertuga">
+	<requires>
+		<import addon="xbmc.python" version="2.19.0" />
+		<import addon="baseaddons.repository" version="0.2" />
+		<import addon="script.streamtvsupertuga.artwork" version="0.1" />
+		<import addon="script.streamtvsupertuga.metadata" version="0.1" />
+		<import addon="script.module.urlresolver" version="3.0.0" />
+		<import addon="script.module.metahandler" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="streamtvsupertuga.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="pt">Movies and TV Shows on Stream TVsupertuga</summary>
+		<platform>all</platform>
+		<forum>http://forumtvsupertuga.pe.hu/</forum>
+		<website>https://www.facebook.com/TVsupertuga.PT/</website>
+		<source>http://repo.tvsupertuga.xyz/</source>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+			<screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshots/screenshot-03.jpg</screenshot>
+		</assets>
+		<news>- Initial release
+- Free movies
+- Free TV Shows</news>
+	</extension>
+</addon>
+
 <addon id="script.module.submundo.addon"
        name="[COLOR red][B]TV[/B][/COLOR] [COLOR white][B]Sub[/B][/COLOR][COLOR red][B]Mundo[/B][/COLOR]"
        version="0.3"
@@ -585,6 +648,48 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 	<disclaimer lang="pt">Dependency For TVsupertuga</disclaimer>
     <platform>all</platform>
   </extension>
+</addon>
+
+<addon id="script.module.urlresolver" name="URLResolver" version="4.0.07" provider-name="Eldorado, tknorris, jsergio, tvaddons">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+		<import addon="plugin.video.youtube" optional="true" />
+		<import addon="script.module.python.twitch" optional="true" />
+		<import addon="script.module.cryptopy" version="1.2.6" optional="true" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.python.pluginsource" library="lib/default.py" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+		<description lang="en">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
+        <forum>https://www.tvaddons.co/forums</forum>
+        <website>https://www.tvaddons.co</website>
+	</extension>
+</addon>
+
+<addon id="script.streamtvsupertuga.artwork" version="0.1" name="Stream TVsupertuga Artwork" provider-name="TVsupertuga">
+	<requires>
+		<import addon="xbmc.python" version="2.19.0"/>
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<summary>Themes for the Stream TVsupertuga Addon</summary>
+		<description>Themes for Stream TVsupertuga are maintained separately to make distribution of the the addon itself easier/faster.</description>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="script.streamtvsupertuga.metadata" version="0.1" name="Stream TVsupertuga Metadata" provider-name="TVsupertuga">
+	<requires>
+		<import addon="xbmc.python" version="2.19.0"/>
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<summary>Metadata for the Stream TVsupertuga Addon</summary>
+		<description>Metadata for Stream TVsupertuga are maintained separately to make distribution of the the addon itself easier/faster.</description>
+		<platform>all</platform>
+	</extension>
 </addon>
 
 <addon id="script.video.F4mProxy"

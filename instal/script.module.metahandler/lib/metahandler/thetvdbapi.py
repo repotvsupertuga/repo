@@ -27,8 +27,11 @@ import xml.parsers.expat as expat
 from cStringIO import StringIO
 from zipfile import ZipFile
 
+from addon.common.addon import Addon
+addon = Addon('script.module.metahandler')
+
 class TheTVDB(object):
-    def __init__(self, api_key='2B8557E0CBF7D720', language = 'en', want_raw = False):
+    def __init__(self, api_key=addon.get_setting('tvdb_api_key'), language = 'en', want_raw = False):
         #http://thetvdb.com/api/<apikey>/<request>
         self.api_key = api_key
         self.mirror_url = "http://thetvdb.com"
@@ -300,13 +303,13 @@ class TheTVDB(object):
         """Get the episode object matching this episode_id."""
         #url = "%s/series/%s/default/%s/%s" % (self.base_key_url, show_id, season_num, ep_num)
         '''http://www.thetvdb.com/api/GetEpisodeByAirDate.php?apikey=1D62F2F90030C444&seriesid=71256&airdate=2010-03-29'''
-        url = "%s/GetEpisodeByAirDate.php?apikey=%s&seriesid=%s&airdate=%s&language=%s" % (self.base_url, self.api_key, show_id, aired, self.language)
+        url = "%s/GetEpisodeByAirDate.php?apikey=1D62F2F90030C444&seriesid=%s&airdate=%s" % (self.base_url, show_id, aired)
         return self._get_episode_by_url(url)
 
 
     def get_episode_by_season_ep(self, show_id, season_num, ep_num):
         """Get the episode object matching this episode_id."""
-        url = "%s/series/%s/default/%s/%s/%s.xml" % (self.base_xml_url, show_id, season_num, ep_num, self.language)
+        url = "%s/series/%s/default/%s/%s" % (self.base_xml_url, show_id, season_num, ep_num)
         return self._get_episode_by_url(url)
 
 
