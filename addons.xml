@@ -465,7 +465,7 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 
 <addon id="script.module.mikafilmes.addon"
        name="MIKA FILMES"
-       version="2.0"
+       version="2.1"
        provider-name="MIKAEL ALVES">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
