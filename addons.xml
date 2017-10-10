@@ -668,30 +668,6 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 	</extension>
 </addon>
 
-<addon id="script.streamtvsupertuga.artwork" version="0.1" name="Stream TVsupertuga Artwork" provider-name="TVsupertuga">
-	<requires>
-		<import addon="xbmc.python" version="2.19.0"/>
-	</requires>
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<summary>Themes for the Stream TVsupertuga Addon</summary>
-		<description>Themes for Stream TVsupertuga are maintained separately to make distribution of the the addon itself easier/faster.</description>
-		<platform>all</platform>
-	</extension>
-</addon>
-
-<addon id="script.streamtvsupertuga.metadata" version="0.1" name="Stream TVsupertuga Metadata" provider-name="TVsupertuga">
-	<requires>
-		<import addon="xbmc.python" version="2.19.0"/>
-	</requires>
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<summary>Metadata for the Stream TVsupertuga Addon</summary>
-		<description>Metadata for Stream TVsupertuga are maintained separately to make distribution of the the addon itself easier/faster.</description>
-		<platform>all</platform>
-	</extension>
-</addon>
-
 <addon id="script.video.F4mProxy"
 	     name="F4mProxy"
 	     version="2.5.5"
