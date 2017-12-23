@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.tvsupertuga.pairwith"
+  name="TVsupertuga Pair With"
+  version="0.1" 
+  provider-name="Team tvsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="addon.py">
+    <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">TVsupertuga Menu System</summary>
+    <description lang="en">TVsupertuga Menu System</description>
+	<disclaimer>TVsupertuga Menu System</disclaimer>
+  </extension>
+</addon>

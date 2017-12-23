@@ -122,6 +122,55 @@
     </extension>
 </addon>
 
+<addon id="plugin.video.playthis"
+       name="PlayThis"
+       version="3.4.3"
+       provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+        <import addon="script.module.urlresolver" version="3.4.0"/>
+        <import addon="script.module.youtube.dl"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/__run__.py">
+        <provides>executable video audio image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <news>
+- update reddit video resolver
+- fix m3u8 check missing urls with parameters
+- add shout: to direct play
+- filter .css
+- remove unused dialog
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/media/screenshots/screenshot000.jpg</screenshot>
+            <screenshot>resources/media/screenshots/screenshot001.jpg</screenshot>
+            <screenshot>resources/media/screenshots/screenshot002.jpg</screenshot>
+            <screenshot>resources/media/screenshots/screenshot003.jpg</screenshot>
+            <screenshot>resources/media/screenshots/screenshot004.jpg</screenshot>
+        </assets>
+        <summary lang="en_gb">Find and resolve media from a url to play or open.</summary>
+        <description lang="en_gb">
+PlayThis will attempt to find and resolve* media from a url to play or open. A history list is available for future use, exporting to .m3u/.strm** and sending to a remote PlayThis add-on. Supports video, audio, images and executable***.
+* resolves using URLResolver and youtube-dl
+** exported .m3u/.strm is only usable in Kodi w/ PlayThis installed
+*** 'executable' items are urls with potential results available through scraping
+
+Companion browser extension available on the Chrome Web Store and Mozilla's AMO Gallery
+
+Artwork by @konsumer420
+        </description>
+        <language></language>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum></forum>
+        <website>https://github.com/anxdpanic/plugin.video.playthis#playthis</website>
+        <source>https://github.com/anxdpanic/plugin.video.playthis</source>
+	</extension>
+</addon>
+
 <addon
   id="plugin.video.pornomix"
   version="0.1"
@@ -210,6 +259,31 @@ For updates check the readme.
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <platform>all</platform>
   </extension>
+</addon>
+
+<addon id="plugin.video.tvgolo"
+       name="OKGoals"
+       version="1.0.6"
+       provider-name="fightnight">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.urlresolver"  version="1.0.5"/>
+		<import addon="script.module.requests"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+		<language>pt</language>
+		<platform>all</platform>
+		<source>https://github.com/fightnight/fightnight-addons/tree/master/plugin.video.tvgolo</source>
+		<summary lang="en">OKGoals addon for Kodi</summary>
+		<summary lang="pt">OKGoals addon para o Kodi</summary>
+		<description lang="en">The best goals from OKGoals.com on Kodi.</description>
+		<description lang="pt">Os melhor golos do OKGoals.com para o Kodi.</description>
+		<disclaimer lang="en">Independent and opensource addon not endorsed by OKGoals.</disclaimer>
+		<disclaimer lang="pt">Addon independente e opensource não afliado com OKGoals.</disclaimer>
+    </extension>
 </addon>
 
 <addon id="plugin.video.TVsupertuga" version="0.0.9" name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR]" provider-name="TVsupertuga">
@@ -396,6 +470,22 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
     <source>https://github.com/Razzeee/script.module.dateutil</source>
     <email></email>
   </extension>
+</addon>
+
+<addon id="script.module.gdrive" version="0.1" name="gdrive-Play" provider-name="Team TVsupertuga">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>all</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>Listen to music, watch videos and view photos from your Google Drive account</summary>
+        <description>Plays music and video from your Google Drive account.  Not affiliated with Google.</description>
+        <platform>all</platform>
+    </extension>
+	<extension point="xbmc.service" library="service.py" start="login">
+    </extension>
 </addon>
 
 <addon id="script.module.httplib2" name="httplib2" provider-name=" Joe Gregorio" version="0.8.0">
@@ -668,6 +758,38 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 	</extension>
 </addon>
 
+<addon id="script.module.vod.tvsupertuga.addon"
+       name="VOD TVsupertuga"
+       version="0.7"
+       provider-name="TVsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.t0mm0.common" version="2.0.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.beautifulsoup4" />
+    <import addon="plugin.video.metalliq" version="2.0.16krypton"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.httplib2" />
+    <import addon="script.module.youtube.dl" optional="true"/>
+    <import addon="plugin.video.youtube" version="3.0.0"/>
+    <import addon="script.module.urlresolver" />
+    <import addon="script.module.simplejson" />
+    <import addon="script.common.plugin.cache" version="2.5.2"/>
+    <import addon="script.module.metahandler" version="2.5.1"/>
+
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pt">TVsupertuga</summary>
+    <description lang="pt">TVsupertuga</description>
+    <platform>all</platform>
+  </extension>
+</addon>
+
 <addon id="script.streamtvsupertuga.artwork" version="0.1" name="Stream TVsupertuga Artwork" provider-name="TVsupertuga">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
@@ -690,6 +812,24 @@ SEND E MAIL: tvsupertuga@gmail.com[/B][/COLOR]</description>
 		<description>Metadata for Stream TVsupertuga are maintained separately to make distribution of the the addon itself easier/faster.</description>
 		<platform>all</platform>
 	</extension>
+</addon>
+
+<addon id="script.tvsupertuga.pairwith"
+  name="TVsupertuga Pair With"
+  version="0.1"
+  provider-name="Team tvsupertuga">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="addon.py">
+    <provides>all</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">TVsupertuga Menu System</summary>
+    <description lang="en">TVsupertuga Menu System</description>
+	<disclaimer>TVsupertuga Menu System</disclaimer>
+  </extension>
 </addon>
 
 <addon id="script.video.F4mProxy"
