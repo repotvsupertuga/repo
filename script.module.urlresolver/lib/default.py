@@ -20,8 +20,6 @@ from urlresolver.lib import kodi
 from urlresolver.lib import log_utils
 from urlresolver.lib import cache
 from urlresolver.lib.url_dispatcher import URL_Dispatcher
-
-logger = log_utils.Logger.get_logger()
 url_dispatcher = URL_Dispatcher()
 
 def __enum(**enums):
@@ -32,10 +30,9 @@ MODES = __enum(AUTH_RD='auth_rd', RESET_RD='reset_rd', RESET_CACHE='reset_cache'
 @url_dispatcher.register(MODES.AUTH_RD)
 def auth_rd():
     kodi.close_all()
-    kodi.sleep(500)  # sleep or authorize won't work for some reason
     from urlresolver.plugins import realdebrid
     if realdebrid.RealDebridResolver().authorize_resolver():
-        kodi.notify(msg=kodi.i18n('rd_authorized'), duration=5000)
+        kodi.notify(msg='Real-Debrid Resolver Authorized', duration=5000)
 
 @url_dispatcher.register(MODES.RESET_RD)
 def reset_rd():
@@ -44,20 +41,20 @@ def reset_rd():
     from urlresolver.plugins import realdebrid
     rd = realdebrid.RealDebridResolver()
     rd.reset_authorization()
-    kodi.notify(msg=kodi.i18n('rd_auth_reset'), duration=5000)
+    kodi.notify(msg='Real-Debrid Authorization Reset', duration=5000)
     
 @url_dispatcher.register(MODES.RESET_CACHE)
 def reset_cache():
     if cache.reset_cache():
-        kodi.notify(msg=kodi.i18n('cache_reset'))
+        kodi.notify(msg='Cache Reset')
     else:
-        kodi.notify(msg=kodi.i18n('cache_reset_failed'))
+        kodi.notify(msg='Cache Reset Failed')
     
 def main(argv=None):
     if sys.argv: argv = sys.argv
     queries = kodi.parse_query(sys.argv[2])
-    logger.log('Version: |%s| Queries: |%s|' % (kodi.get_version(), queries))
-    logger.log('Args: |%s|' % (argv))
+    log_utils.log('Version: |%s| Queries: |%s|' % (kodi.get_version(), queries))
+    log_utils.log('Args: |%s|' % (argv))
 
     # don't process params that don't match our url exactly. (e.g. plugin://plugin.video.1channel/extrafanart)
     plugin_url = 'plugin://%s/' % (kodi.get_id())

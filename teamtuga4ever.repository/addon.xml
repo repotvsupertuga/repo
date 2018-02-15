@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="teamtuga4ever.repository" name="teamtuga4ever repository" version="1.5" provider-name="teamtuga4ever">
+	<extension point="xbmc.addon.repository" name="teamtuga4ever repository">
+		<info compressed="false">https://raw.githubusercontent.com/teamtuga4ever/teamtuga4ever.repository/master/addons.xml</info>
+		<checksum>https://raw.githubusercontent.com/teamtuga4ever/teamtuga4ever.repository/master/addons.xml.md5</checksum>
+		<datadir zip="true">https://raw.githubusercontent.com/teamtuga4ever/teamtuga4ever.repository/master/instal/</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Equipe TeamTuga4ever</summary>
+		<description>teamtuga4ever Repository</description>
+		<disclaimer></disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>

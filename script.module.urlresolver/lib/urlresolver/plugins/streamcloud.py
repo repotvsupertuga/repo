@@ -17,10 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
-from lib import helpers
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
-
 
 class StreamcloudResolver(UrlResolver):
     name = "streamcloud"
@@ -32,24 +30,32 @@ class StreamcloudResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        html = response.content
+        resp = self.net.http_GET(web_url)
+        html = resp.content
+        post_url = resp.get_url()
         if re.search('>(File Not Found)<', html):
             raise ResolverError('File Not Found or removed')
 
-        cnt = 10
-        match = re.search('count\s*=\s*(\d+);', html)
-        if match:
-            cnt = int(match.group(1))
-        cnt += 1
+        form_values = {}
+        for i in re.finditer('<input.*?name="(.*?)".*?value="(.*?)">', html):
+            form_values[i.group(1)] = i.group(2).replace("download1", "download2")
+        html = self.net.http_POST(post_url, form_data=form_values).content
 
-        data = helpers.get_hidden(html)
-        headers.update({'Referer': web_url})
-        common.kodi.sleep(cnt * 1000)
-        html = self.net.http_POST(response.get_url(), form_data=data, headers=headers).content
-        sources = helpers.scrape_sources(html, patterns=['''file\s*:\s*["'](?P<url>[^"']+)'''])
-        return helpers.pick_source(sources) + helpers.append_headers(headers)
+        r = re.search('file: "(.+?)",', html)
+        if r:
+            return r.group(1)
+        else:
+            raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
         return 'http://streamcloud.eu/%s' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

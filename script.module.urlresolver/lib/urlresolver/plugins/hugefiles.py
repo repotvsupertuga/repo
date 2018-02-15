@@ -20,12 +20,8 @@ import re
 import urllib
 import urllib2
 from lib import captcha_lib
-from lib import helpers
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
-
-logger = common.log_utils.Logger.get_logger(__name__)
-logger.disable()
 
 class HugefilesResolver(UrlResolver):
     name = "hugefiles"
@@ -38,7 +34,7 @@ class HugefilesResolver(UrlResolver):
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
 
-        logger.log_debug('HugeFiles: get_link: %s' % (web_url))
+        common.log_utils.log_debug('HugeFiles: get_link: %s' % (web_url))
         html = self.net.http_GET(web_url).content
 
         r = re.findall('File Not Found', html)
@@ -46,23 +42,53 @@ class HugefilesResolver(UrlResolver):
             raise ResolverError('File Not Found or removed')
 
         # Grab data values
-        data = helpers.get_hidden(html)
+        data = {}
+        r = re.findall(r'type="hidden"\s+name="(.+?)"\s+value="(.*?)"', html)
+
+        if r:
+            for name, value in r:
+                data[name] = value
+        else:
+            raise ResolverError('Unable to resolve link')
+
+        data['method_free'] = 'Free Download'
         data.update(captcha_lib.do_captcha(html))
-        logger.log_debug('HugeFiles - Requesting POST URL: %s with data: %s' % (web_url, data))
+
+        common.log_utils.log_debug('HugeFiles - Requesting POST URL: %s with data: %s' % (web_url, data))
         html = self.net.http_POST(web_url, data).content
 
         # Re-grab data values
-        data = helpers.get_hidden(html)
+        data = {}
+        r = re.findall(r'type="hidden"\s+name="(.+?)"\s+value="(.*?)"', html)
+
+        if r:
+            for name, value in r:
+                data[name] = value
+        else:
+            raise ResolverError('Unable to resolve link')
+
         data['referer'] = web_url
+
         headers = {'User-Agent': common.IE_USER_AGENT}
-        logger.log_debug('HugeFiles - Requesting POST URL: %s with data: %s' % (web_url, data))
+
+        common.log_utils.log_debug('HugeFiles - Requesting POST URL: %s with data: %s' % (web_url, data))
         request = urllib2.Request(web_url, data=urllib.urlencode(data), headers=headers)
 
         try: stream_url = urllib2.urlopen(request).geturl()
         except: return
 
-        logger.log_debug('Hugefiles stream Found: %s' % stream_url)
+        common.log_utils.log_debug('Hugefiles stream Found: %s' % stream_url)
         return stream_url
 
     def get_url(self, host, media_id):
         return 'http://hugefiles.net/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

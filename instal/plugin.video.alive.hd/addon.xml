@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.alive.hd" name="Alive HD" version="1.6" provider-name="frenchdj">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.addon.common" version="2.0.0"/>
+    <import addon="plugin.video.youtube" />
+  </requires>
+	
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+	
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">alive.hd</summary>
+    <description lang="en">[ENG] Concerts and Djs live performances with HD quality. Playlists organized by categories and any source comes from Youtube users. Advised the latest version of youtube 5.2.*
+[PT] Concertos e performances de Djs ao vivo com qualidade HD. Playlists organizadas por categorias com diversas vertentes Musicais. Toda a fonte  vem de utilizadores do Youtube. Aconselhado a ultima versao do youtube 5.2.* </description>
+    <platform>all</platform>
+    <forum></forum>
+    <website></website>
+  </extension>
+</addon>

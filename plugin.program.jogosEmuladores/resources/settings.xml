@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="BACKUPS">
+    <setting id="zip" type="folder"    label="Choose Backup Storage Location"      default="special://home/backupdir"/>
+	</category>
+</settings>

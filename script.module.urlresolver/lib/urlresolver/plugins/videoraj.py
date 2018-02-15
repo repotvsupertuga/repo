@@ -16,11 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-# import re
-# import urllib
-# from urlresolver import common
-# from urlresolver.resolver import UrlResolver, ResolverError
-from lib import helpers
+import re
+import urllib
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
@@ -34,15 +31,38 @@ class VideoRajResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        html = response.content
 
-        if 'vidError' in html:
-            raise ResolverError('File Not Found or removed')
+        html = self.net.http_GET(web_url).content
 
-        sources = helpers.scrape_sources(html)
-        return helpers.pick_source(sources)
+        r = re.search('key: "(.+?)"', html)
+        if r:
+            r = r.group(1)
+
+            try: filekey = re.compile('\s+%s="(.+?)"' % r).findall(html)[-1]
+            except: filekey = r
+
+            player_url = 'http://www.videoraj.to/api/player.api.php?pass=&numOfErrors=0&cid=1&cid3=&key=%s&user=&cid2=&file=%s' % (filekey, media_id)
+
+            html = self.net.http_GET(player_url).content
+
+            r = re.search('url=(.+?)&', html)
+
+            if r:
+                stream_url = r.group(1)
+            else:
+                raise ResolverError('File Not Found or removed')
+
+        return urllib.unquote(stream_url)
 
     def get_url(self, host, media_id):
-        return 'http://www.videoraj.to/embed.php?id=%s&playerPage=1&autoplay=1' % media_id
+        return 'http://www.videoraj.to/embed.php?id=%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

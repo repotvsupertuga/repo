@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.addon_activador"
+       name="[COLOR blue]Kodi 17,18 Addon Activador[/COLOR]"
+	   version="1.0.0"
+	   provider-name="bit.ly/[COLOR blue][B]AMO[/B][/COLOR][COLOR green]box[/COLOR] | bitLoki1979 | HSK-DE">
+    <requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="activador.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary>Kodi 17,18 Addon Activador</summary>
+    <description>Apos update do Kodi 16 para o Kodi 17, este addon permite activar os addons instalados com um so click.</description>
+    </extension>
+</addon>

@@ -21,9 +21,9 @@ import re
 import json
 import urllib
 import urlparse
-from lib import helpers
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
+import xbmcgui
 
 class VKResolver(UrlResolver):
     name = "VK.com"
@@ -43,26 +43,76 @@ class VKResolver(UrlResolver):
         try: oid, video_id = query['oid'][0], query['id'][0]
         except: oid, video_id = re.findall('(.*)_(.*)', media_id)[0]
 
-        sources = self.__get_sources(oid, video_id)
-        sources.sort(key=lambda x: int(x[0]), reverse=True)
+        try: hash = query['hash'][0]
+        except: hash = self.__get_hash(oid, video_id)
 
-        source = helpers.pick_source(sources)
-        return source + helpers.append_headers(headers)
-        raise ResolverError('No video found')
+        api_url = 'http://api.vk.com/method/video.getEmbed?oid=%s&video_id=%s&embed_hash=%s' % (oid, video_id, hash)
 
-    def __get_sources(self, oid, video_id):
-        sources_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
-        html = self.net.http_GET(sources_url).content
+        html = self.net.http_GET(api_url).content
         html = re.sub(r'[^\x00-\x7F]+', ' ', html)
 
-        sources = re.findall('(\d+)x\d+.+?(http.+?\.m3u8.+?)n', html)
+        try: result = json.loads(html)['response']
+        except: result = self.__get_private(oid, video_id)
 
-        if not sources:
-            sources = re.findall('"url(\d+)"\s*:\s*"(.+?)"', html)
+        quality_list = []
+        link_list = []
+        best_link = ''
+        for quality in ['url240', 'url360', 'url480', 'url540', 'url720']:
+            if quality in result:
+                quality_list.append(quality[3:])
+                link_list.append(result[quality])
+                best_link = result[quality]
 
-        sources = [(i[0], i[1].replace('\\', '')) for i in sources]
+        if self.get_setting('auto_pick') == 'true' and best_link:
+            return best_link + '|' + urllib.urlencode(headers)
+        else:
+            if quality_list:
+                if len(quality_list) > 1:
+                    result = xbmcgui.Dialog().select('Choose the link', quality_list)
+                    if result == -1:
+                        raise ResolverError('No link selected')
+                    else:
+                        return link_list[result] + '|' + urllib.urlencode(headers)
+                else:
+                    return link_list[0] + '|' + urllib.urlencode(headers)
 
-        return sources
+        raise ResolverError('No video found')
+
+    def __get_private(self, oid, video_id):
+        private_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
+        html = self.net.http_GET(private_url).content
+        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
+        match = re.search('var\s+vars\s*=\s*({.+?});', html)
+        try: return json.loads(match.group(1))
+        except: return {}
+        return {}
+
+    def __get_hash(self, oid, video_id):
+        hash_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
+        html = self.net.http_GET(hash_url).content
+        html = html.replace('\'', '"').replace(' ', '')
+        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
+        match = re.search('"hash2"\s*:\s*"(.+?)"', html)
+        if match: return match.group(1)
+        match = re.search('"hash"\s*:\s*"(.+?)"', html)
+        if match: return match.group(1)
+        return ''
 
     def get_url(self, host, media_id):
-        return 'http://vk.com/video_ext.php?%s' % (media_id)
+        return 'http://vk.com/video_ext.php?%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host
+
+    @classmethod
+    def get_settings_xml(cls):
+        xml = super(cls, cls).get_settings_xml()
+        xml.append('<setting id="%s_auto_pick" type="bool" label="Automatically pick best quality" default="false" visible="true"/>' % (cls.__name__))
+        return xml

@@ -15,8 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
+
 import re
-from lib import helpers
+import base64
+import urllib
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
@@ -30,23 +32,46 @@ class NosvideoResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT, 'Referer': web_url}
+
+        html = self.net.http_GET(web_url).content
+
+        if 'File Not Found' in html:
+            raise ResolverError('File Not Found')
+
+        r = re.search('class\s*=\s*[\'|\"]btn.+?[\'|\"]\s+href\s*=\s*[\'|\"](.+?)[\'|\"]', html)
+        if not r:
+            raise ResolverError('File Not Found')
+
+        headers = {'Referer': r.group(1)}
+
+        web_url = 'http://nosvideo.com/vj/video.php?u=%s&w=&h=530' % media_id
+
         html = self.net.http_GET(web_url, headers=headers).content
-        html += helpers.get_packed_data(html)
-        match = re.search('playlist\s*:\s*"([^"]+)', html)
-        if match:
-            xml = self.net.http_GET(match.group(1), headers=headers).content
-            count = 1
-            sources = []
-            streams = set()
-            for match in re.finditer('''file="([^'"]*mp4)''', xml):
-                stream_url = match.group(1)
-                if stream_url not in streams:
-                    sources.append(('Source %s' % (count), stream_url))
-                    streams.add(stream_url)
-                    count += 1
-            
-        return helpers.pick_source(sources) + helpers.append_headers(headers)
+
+        stream_url = re.compile('var\stracker\s*=\s*[\'|\"](.+?)[\'|\"]').findall(html)
+        stream_url += re.compile("tracker *: *[\'|\"](.+?)[\'|\"]").findall(html)
+
+        if len(stream_url) > 0:
+            stream_url = stream_url[0]
+        else:
+            raise ResolverError('Unable to locate video file')
+
+        try: stream_url = base64.b64decode(stream_url)
+        except: pass
+
+        stream_url += '|' + urllib.urlencode({'User-Agent': common.IE_USER_AGENT})
+
+        return stream_url
 
     def get_url(self, host, media_id):
-        return 'http://nosvideo.com/embed/%s' % media_id
+        return 'http://nosvideo.com/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

@@ -1,0 +1,205 @@
+# XBMC Media Center language file
+# Addon Name: Open Weather Map
+# Addon id: weather.openweathermap
+# Addon Provider: bitboy
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32101"
+msgid "Location"
+msgstr "Standort"
+
+msgctxt "#32102"
+msgid "Map"
+msgstr "Karte"
+
+msgctxt "#32103"
+msgid "Units"
+msgstr "Einheiten"
+
+#empty strings from id 32104 to 32110
+
+msgctxt "#32111"
+msgid "Location 1"
+msgstr "Standort 1"
+
+msgctxt "#32112"
+msgid "Location 2"
+msgstr "Standort 2"
+
+msgctxt "#32113"
+msgid "Location 3"
+msgstr "Standort 3"
+
+#empty strings from id 32114 to 32119
+
+msgctxt "#32120"
+msgid "Zoom Level"
+msgstr "Zoom Level"
+
+msgctxt "#32121"
+msgid "Weather Map Transparency"
+msgstr "Wetterkartentransparenz"
+
+msgctxt "#32122"
+msgid "Background Render Engine"
+msgstr "Hintergrund Render Engine"
+
+msgctxt "#32123"
+msgid "Mark Location on the Background"
+msgstr "Standort auf dem Hintergrund markieren"
+
+#empty strings from id 32123 to 32129
+
+msgctxt "#32130"
+msgid "Download Temperature Map"
+msgstr "Temperaturkarte herunterladen"
+
+msgctxt "#32131"
+msgid "Download Rain Map"
+msgstr "Regenkarte herunterladen"
+
+msgctxt "#32132"
+msgid "Download Clouds Map"
+msgstr "Wolkenkarte herunterladen"
+
+msgctxt "#32133"
+msgid "Download Snow Map"
+msgstr "Schneekarte herunterladen"
+
+msgctxt "#32134"
+msgid "Download Wind Map"
+msgstr "Windkarte herunterladen"
+
+msgctxt "#32135"
+msgid "Download Pressure Map"
+msgstr "Druckkarte herunterladen"
+
+msgctxt "#32136"
+msgid "Download Precipitation Map"
+msgstr "Niederschlagskarte herunterladen"
+
+#empty strings
+
+msgctxt "#32150"
+msgid "Temperature"
+msgstr "Temperatur"
+
+msgctxt "#32151"
+msgid "System Default"
+msgstr "System Standard"
+
+msgctxt "#32152"
+msgid "Degree Celsius (C)"
+msgstr "Grad Celsius (C)"
+
+msgctxt "#32153"
+msgid "Degree Fahrenheit (F)"
+msgstr "Grad Fahrenheit (F)"
+
+msgctxt "#32154"
+msgid "Kelvin (K)"
+msgstr "Kelvin (K)"
+
+msgctxt "#32155"
+msgid "Wind speed"
+msgstr "Windgeschwindigkeit"
+
+msgctxt "#32156"
+msgid "meter per second (m/s)"
+msgstr "Meter pro Sekunde (m/s)"
+
+msgctxt "#32157"
+msgid "kilometer per hour (km/h)"
+msgstr "Kilometer pro Stunde (km/h)"
+
+msgctxt "#32158"
+msgid "miles per hour (mph)"
+msgstr "Meilen pro Stunde (mph)"
+
+msgctxt "#32159"
+msgid "knots (kn)"
+msgstr "Knoten (kn)"
+
+msgctxt "#32160"
+msgid "beaufort scale (bft)"
+msgstr "Beaufort Skala (bft)"
+
+msgctxt "#32180"
+msgid "North-northeast"
+msgstr "Nord-Nordost"
+
+msgctxt "#32181"
+msgid "Northeast"
+msgstr "Nordosten"
+
+msgctxt "#32182"
+msgid "East-northeast"
+msgstr "Ost-Nordosten"
+
+msgctxt "#32183"
+msgid "East"
+msgstr "Osten"
+
+msgctxt "#32184"
+msgid "East-southeast"
+msgstr "Ost-Südosten"
+
+msgctxt "#32185"
+msgid "Southeast"
+msgstr "Südosten"
+
+msgctxt "#32186"
+msgid "South-southeast"
+msgstr "Süd-Südosten"
+
+msgctxt "#32187"
+msgid "South"
+msgstr "Süden"
+
+msgctxt "#32188"
+msgid "South-southwest"
+msgstr "Süd-Südwesten"
+
+msgctxt "#32189"
+msgid "Southwest"
+msgstr "Südwesten"
+
+msgctxt "#32190"
+msgid "West-southwest"
+msgstr "West-Südwesten"
+
+msgctxt "#32191"
+msgid "West"
+msgstr "Westen"
+
+msgctxt "#32192"
+msgid "West-northwest"
+msgstr "West-Nordwesten"
+
+msgctxt "#32193"
+msgid "Northwest"
+msgstr "Nordwesten"
+
+msgctxt "#32194"
+msgid "North-northwest"
+msgstr "Nord-Nordwesten"
+
+msgctxt "#32195"
+msgid "North"
+msgstr "Norden"
+
+msgctxt "#32196"
+msgid "from"
+msgstr "aus"

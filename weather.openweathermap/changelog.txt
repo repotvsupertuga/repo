@@ -1,0 +1,31 @@
+v1.0.0
+- added polish translation (thx to sebf)
+- added 3-hourly data, up to 12 entries
+- log level set to debug
+- skin fixes for gotham Beta 2
+
+v0.0.6
+- added french translation (thx to allophos)
+
+v0.0.5
+- NOTE: zip contains confluence modification which is required for new features
+- feature: properties daily.%i are set (like wunderground does)
+- feature: freely configurable units
+- feature: side menu button allows cycling through available maps
+
+v0.0.4
+- bugfix: hardcoded languages for compatibility with older versions 
+- feature: property 'Current.WindGust' (maximum wind speed)
+- feature: property 'day%i.Wind' (wind speed)
+- feature: property 'day%i.WindDirection'
+- feature: opens setting window if no location is defined
+- some stability improvements
+- api key added
+- icon changed
+
+v0.0.3
+- bugfix: invalid syntax
+- bugfix: linux compatibility
+
+v0.0.2 
+- initial release

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 """
     Purevid urlresolver XBMC Addon
     Copyright (C) 2011 t0mm0, belese, JUL1EN094
@@ -22,11 +22,7 @@ import re
 import urllib
 import json
 from urlresolver import common
-from lib import helpers
-from urlresolver.resolver import UrlResolver, ResolverError  # @UnusedImport
-
-logger = common.log_utils.Logger.get_logger(__name__)
-logger.disable()
+from urlresolver.resolver import UrlResolver, ResolverError
 
 class PureVidResolver(UrlResolver):
     name = "purevid"
@@ -56,12 +52,22 @@ class PureVidResolver(UrlResolver):
         cookies = {}
         for cookie in self.net._cj:
             cookies[cookie.name] = cookie.value
-        url += helpers.append_headers({'Cookie': urllib.urlencode(cookies)})
-        logger.log_debug(url)
+        url = url + '|' + urllib.urlencode({'Cookie': urllib.urlencode(cookies)})
+        common.log_utils.log_debug(url)
         return url
 
     def get_url(self, host, media_id):
         return 'http://www.purevid.com/?m=video_info_embed_flv&id=%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host
 
     def needLogin(self):
         url = 'http://www.purevid.com/?m=main'
@@ -69,17 +75,17 @@ class PureVidResolver(UrlResolver):
             return True
         self.net.set_cookies(self.pv_cookie_file)
         source = self.net.http_GET(url).content
-        logger.log_debug(source.encode('utf-8'))
-        if re.search("""<span>Welcome <strong>.*</strong></span>""", source):
-            logger.log_debug('needLogin returning False')
+        common.log_utils.log_debug(source.encode('utf-8'))
+        if re.search("""<span>Welcome <strong>.*</strong></span>""", source) :
+            common.log_utils.log_debug('needLogin returning False')
             return False
         else:
-            logger.log_debug('needLogin returning True')
+            common.log_utils.log_debug('needLogin returning True')
             return True
 
     def login(self):
         if self.needLogin():
-            logger.log('login to purevid')
+            common.log_utils.log('login to purevid')
             url = 'http://www.purevid.com/?m=login'
             data = {'username': self.get_setting('username'), 'password': self.get_setting('password')}
             source = self.net.http_POST(url, data).content
@@ -94,7 +100,7 @@ class PureVidResolver(UrlResolver):
 
     @classmethod
     def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml(include_login=False)
+        xml = super(cls, cls).get_settings_xml()
         xml.append('<setting id="%s_login" type="bool" label="login" default="false"/>' % (cls.__name__))
         xml.append('<setting id="%s_username" enable="eq(-1,true)" type="text" label="Username" default=""/>' % (cls.__name__))
         xml.append('<setting id="%s_password" enable="eq(-2,true)" type="text" label="Password" option="hidden" default=""/>' % (cls.__name__))

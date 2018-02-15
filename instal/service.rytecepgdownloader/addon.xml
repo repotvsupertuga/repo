@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="service.rytecepgdownloader" 
+    name="Rytec EPG Downloader"
+    version="0.6.0"
+    provider-name="Jin">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.requests"/>
+    </requires>
+    <extension point="xbmc.service" library="service.py" start="startup" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">XMLTV EPG Downloader for IPTV Simple PVR Addon</summary>
+        <summary lang="de">XMLTV EPG Downloader fuer IPTV Simple PVR Addon</summary>
+        <language></language>
+        <description lang="en">This service addon allows you to automatically download the xmltv.gz files provided by rytec</description>
+        <description lang="de">Dieses service addon erlaubt es ihnen, die xmltv.gz dateien automatisch von rytec herunterzuladen</description>
+        <forum>http://kodinerds.net</forum>
+    </extension>
+</addon>

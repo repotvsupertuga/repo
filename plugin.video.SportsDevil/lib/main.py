@@ -338,13 +338,6 @@ class Main:
             except:
                 common.showError('Update Kodi to 16+ to view this stream')
                 return None
-            
-        if title.startswith('nohead'):
-            try:
-                liz.setMimeType('video/x-mpegts')
-                liz.setContentLookup(False)
-            except:
-                pass
 
         return liz
 

@@ -1,0 +1,205 @@
+# XBMC Media Center language file
+# Addon Name: Open Weather Map
+# Addon id: weather.openweathermap
+# Addon Provider: bitboy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: clément \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32101"
+msgid "Location"
+msgstr "Lieu"
+
+msgctxt "#32102"
+msgid "Map"
+msgstr "Carte"
+
+msgctxt "#32103"
+msgid "Units"
+msgstr "Unités"
+
+#empty strings from id 32104 to 32110
+
+msgctxt "#32111"
+msgid "Location 1"
+msgstr "Lieu 1"
+
+msgctxt "#32112"
+msgid "Location 2"
+msgstr "Lieu 2"
+
+msgctxt "#32113"
+msgid "Location 3"
+msgstr "Lieu 3"
+
+#empty strings from id 32114 to 32119
+
+msgctxt "#32120"
+msgid "Zoom Level"
+msgstr "Niveau de zoom"
+
+msgctxt "#32121"
+msgid "Weather Map Transparency"
+msgstr "Transparence de la couche météo"
+
+msgctxt "#32122"
+msgid "Background Render Engine"
+msgstr "Moteur de rendu de la carte"
+
+msgctxt "#32123"
+msgid "Mark Location on the Background"
+msgstr "Localiser sur la carte"
+
+#empty strings from id 32123 to 32129
+
+msgctxt "#32130"
+msgid "Download Temperature Map"
+msgstr "Télécharger la carte des températures"
+
+msgctxt "#32131"
+msgid "Download Rain Map"
+msgstr "Télécharger la carte des pluies"
+
+msgctxt "#32132"
+msgid "Download Clouds Map"
+msgstr "Télécharger la carte des nuages"
+
+msgctxt "#32133"
+msgid "Download Snow Map"
+msgstr "Télécharger la carte des neiges"
+
+msgctxt "#32134"
+msgid "Download Wind Map"
+msgstr "Télécharger la carte des vents"
+
+msgctxt "#32135"
+msgid "Download Pressure Map"
+msgstr "Télécharger la carte des pressions"
+
+msgctxt "#32136"
+msgid "Download Precipitation Map"
+msgstr "Télécharger la carte des précipitations"
+
+# Empty strings
+
+msgctxt "#32150"
+msgid "Temperature"
+msgstr "Température"
+
+msgctxt "#32151"
+msgid "System Default"
+msgstr "System Default"
+
+msgctxt "#32152"
+msgid "Degree Celsius (C)"
+msgstr "Degrés Celsius (C)"
+
+msgctxt "#32153"
+msgid "Degree Fahrenheit (F)"
+msgstr "Degrés Fahrenheit (F)"
+
+msgctxt "#32154"
+msgid "Kelvin (K)"
+msgstr "Degrés Kelvin (K)"
+
+msgctxt "#32155"
+msgid "Wind speed"
+msgstr "vitesse du vent"
+
+msgctxt "#32156"
+msgid "meter per second (m/s)"
+msgstr "(m/s)"
+
+msgctxt "#32157"
+msgid "kilometer per hour (km/h)"
+msgstr "(km/h)"
+
+msgctxt "#32158"
+msgid "miles per hour (mph)"
+msgstr "(mph)"
+
+msgctxt "#32159"
+msgid "knots (kn)"
+msgstr "(kn)"
+
+msgctxt "#32160"
+msgid "beaufort scale (bft)"
+msgstr "(bft)"
+
+msgctxt "#32180"
+msgid "North-northeast"
+msgstr "Nord Nord-Est"
+
+msgctxt "#32181"
+msgid "Northeast"
+msgstr "Nord-Est"
+
+msgctxt "#32182"
+msgid "East-northeast"
+msgstr "Est Nord-Est"
+
+msgctxt "#32183"
+msgid "East"
+msgstr "Est"
+
+msgctxt "#32184"
+msgid "East-southeast"
+msgstr "Est Sud-Est"
+
+msgctxt "#32185"
+msgid "Southeast"
+msgstr "Sud-Est"
+
+msgctxt "#32186"
+msgid "South-southeast"
+msgstr "Sud Sud-Est"
+
+msgctxt "#32187"
+msgid "South"
+msgstr "Sud"
+
+msgctxt "#32188"
+msgid "South-southwest"
+msgstr "Sud Sud-Ouest"
+
+msgctxt "#32189"
+msgid "Southwest"
+msgstr "Sud-Ouest"
+
+msgctxt "#32190"
+msgid "West-southwest"
+msgstr "Ouest Sud-Ouest"
+
+msgctxt "#32191"
+msgid "West"
+msgstr "Ouest"
+
+msgctxt "#32192"
+msgid "West-northwest"
+msgstr "Ouet Nord-Ouest"
+
+msgctxt "#32193"
+msgid "Northwest"
+msgstr "Nord-Ouest"
+
+msgctxt "#32194"
+msgid "North-northwest"
+msgstr "Nord Nord-Ouest"
+
+msgctxt "#32195"
+msgid "North"
+msgstr "Nord"
+
+msgctxt "#32196"
+msgid "from"
+msgstr "venant de"

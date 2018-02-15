@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 from lib import captcha_lib
-from lib import helpers
+from lib import jsunpack
 import re
 
 MAX_TRIES = 3
@@ -38,14 +38,20 @@ class KingFilesResolver(UrlResolver):
 
         tries = 0
         while tries < MAX_TRIES:
-            data = helpers.get_hidden(html)
+            data = {}
+            for match in re.finditer('input type="hidden" name="([^"]+)" value="([^"]+)', html):
+                key, value = match.groups()
+                data[key] = value
+            data['method_free'] = 'Free Download'
             data.update(captcha_lib.do_captcha(html))
 
             html = self.net.http_POST(web_url, form_data=data).content
-            html += helpers.get_packed_data(html)
-            match = re.search('name="src"\s*value="([^"]+)', html)
-            if match:
-                return match.group(1)
+            # try to find source in packed data
+            if jsunpack.detect(html):
+                js_data = jsunpack.unpack(html)
+                match = re.search('name="src"\s*value="([^"]+)', js_data)
+                if match:
+                    return match.group(1)
 
             # try to find source in html
             match = re.search('<span[^>]*>\s*<a\s+href="([^"]+)', html, re.DOTALL)
@@ -58,3 +64,13 @@ class KingFilesResolver(UrlResolver):
 
     def get_url(self, host, media_id):
         return 'http://kingfiles.net/%s' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

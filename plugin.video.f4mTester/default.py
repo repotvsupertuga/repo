@@ -88,24 +88,20 @@ if paramstring:
         import json
         setResolved=json.loads(setResolved)
     except:setResolved=False
-    iconImage=None
-    try:
-        iconImage = params['iconImage'][0]
-    except: pass
     
-def playF4mLink(url,name,proxy=None,use_proxy_for_chunks=False,auth_string=None,streamtype='HDS',setResolved=False,swf="",iconImage=None):
+def playF4mLink(url,name,proxy=None,use_proxy_for_chunks=False,auth_string=None,streamtype='HDS',setResolved=False,swf=""):
     from F4mProxy import f4mProxyHelper
     player=f4mProxyHelper()
     #progress = xbmcgui.DialogProgress()
     #progress.create('Starting local proxy')
     if setResolved:
-        urltoplay,item=player.playF4mLink(url, name, proxy, use_proxy_for_chunks,maxbitrate,simpleDownloader,auth_string,streamtype,setResolved,swf,iconImage)
+        urltoplay,item=player.playF4mLink(url, name, proxy, use_proxy_for_chunks,maxbitrate,simpleDownloader,auth_string,streamtype,setResolved,swf)
         item.setProperty("IsPlayable", "true")
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
     else:
         xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
-        player.playF4mLink(url, name, proxy, use_proxy_for_chunks,maxbitrate,simpleDownloader,auth_string,streamtype,setResolved,swf,iconImage)
+        player.playF4mLink(url, name, proxy, use_proxy_for_chunks,maxbitrate,simpleDownloader,auth_string,streamtype,setResolved,swf)
     
     return   
     
@@ -129,23 +125,26 @@ def getUrl(url, cookieJar=None,post=None,referer=None,isJsonPost=False, acceptse
     return link;
 
 def getBBCUrl(urlToFetch):
-    text=getUrl(urlToFetch)
-    bitRate="1500"
-    overrideBitrate=selfAddon.getSetting( "bbcBitRateMax" )
-    if overrideBitrate<>"": bitRate=overrideBitrate
-    bitRate=int(bitRate)
-    regstring='href="(.*?)" bitrate="(.*?)"'
-    birates=re.findall(regstring, text)
-    birates=[(int(j),f) for f,j in birates]
-    birates=sorted(birates, key=lambda f: f[0])
     urlsel=''
-    for r, url in birates:
-        if r<=bitRate:
-            ratesel, urlsel=r, url 
-        else:
-            break
-    if urlsel=='': urlsel=birates[1]
-    print 'xxxxxxxxx',ratesel, urlsel
+    try:
+        text=getUrl(urlToFetch)
+        bitRate="1500"
+        overrideBitrate=selfAddon.getSetting( "bbcBitRateMax" )
+        if overrideBitrate<>"": bitRate=overrideBitrate
+        bitRate=int(bitRate)
+        regstring='href="(.*?)" bitrate="(.*?)"'
+        birates=re.findall(regstring, text)
+        birates=[(int(j),f) for f,j in birates]
+        birates=sorted(birates, key=lambda f: f[0])
+        
+        for r, url in birates:
+            if r<=bitRate:
+                ratesel, urlsel=r, url 
+            else:
+                break
+        if urlsel=='': urlsel=birates[1]
+        print 'xxxxxxxxx',ratesel, urlsel
+    except: pass
     return urlsel
     
     
@@ -172,11 +171,11 @@ def GUIEditExportName(name):
     return(name)
     
 if mode ==None:
-
-    videos=[[getBBCUrl('http://a.files.bbci.co.uk/media/live/manifests/hds/pc/llnw/bbc_one_hd.f4m') +'|Referer=http://www.bbc.co.uk/iplayer/live/bbcone&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc1 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc1.png',0,'',False],
-    [getBBCUrl('http://a.files.bbci.co.uk/media/live/manifests/hds/pc/llnw/bbc_two_hd.f4m')+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc2 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc2.png',0,'',False],
-    [getBBCUrl('http://a.files.bbci.co.uk/media/live/manifests/hds/pc/llnw/bbc_three_hd.f4m')+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc3 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc3.png',0,'',False],
-    [getBBCUrl('http://a.files.bbci.co.uk/media/live/manifests/hds/pc/llnw/bbc_four_hd.f4m')+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc4 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc4.png',0,'',False],
+    bbcsname='http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/ak/'
+    videos=[[getBBCUrl('%sbbc_one_hd.f4m'%bbcsname) +'|Referer=http://www.bbc.co.uk/iplayer/live/bbcone&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc1 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc1.png',0,'',False],
+    [getBBCUrl('%sbbc_two_hd.f4m'%bbcsname)+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc2 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc2.png',0,'',False],
+    [getBBCUrl('%sbbc_three_hd.f4m'%bbcsname)+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc3 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc3.png',0,'',False],
+    [getBBCUrl('%sbbc_four_hd.f4m'%bbcsname)+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc4 (uk)','http://www.parker1.co.uk/myth/icons/tv/bbc4.png',0,'',False],
     [getBBCUrl('http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/llnw/bbc_news24.f4m')+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc news (uk)','http://www.parker1.co.uk/myth/icons/tv/bbcnews.png',0,'',False],
     [getBBCUrl('http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/llnw/bbc_parliament.f4m')+'|Referer=http://www.bbc.co.uk/iplayer/live/bbctwo&X-Requested-With=ShockwaveFlash/18.0.0.160','bbc parliment (uk)','',0,'',False],
     #    ['http://zaphod-live.bbc.co.uk.edgesuite.net/hds-live/livepkgr/_definst_/cbbc/cbbc_1500.f4m','cbbc (uk) 1500kbps','',0,'',False],
@@ -270,7 +269,7 @@ if mode ==None:
 elif mode == "play":
     print 'PLAying ',mode,url,setResolved
     if not name in ['Custom','TESTING not F4M'] :
-        playF4mLink(url,name, proxy_string, proxy_use_chunks,auth_string,streamtype,setResolved,swf,iconImage)
+        playF4mLink(url,name, proxy_string, proxy_use_chunks,auth_string,streamtype,setResolved,swf)
     else:
         listitem = xbmcgui.ListItem( label = str(name), iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path=url )
         xbmc.Player().play( url,listitem)

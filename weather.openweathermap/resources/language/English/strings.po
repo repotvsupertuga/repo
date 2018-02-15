@@ -1,0 +1,205 @@
+# XBMC Media Center language file
+# Addon Name: Open Weather Map
+# Addon id: weather.openweathermap
+# Addon Provider: bitboy
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32101"
+msgid "Location"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Map"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Units"
+msgstr ""
+
+#empty strings from id 32104 to 32110
+
+msgctxt "#32111"
+msgid "Location 1"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Location 2"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Location 3"
+msgstr ""
+
+#empty strings from id 32114 to 32119
+
+msgctxt "#32120"
+msgid "Zoom Level"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Weather Map Transparency"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Background Render Engine"
+msgstr ""
+
+msgctxt "#32123"
+msgid "Mark Location on the Background"
+msgstr ""
+
+#empty strings from id 32123 to 32129
+
+msgctxt "#32130"
+msgid "Download Temperature Map"
+msgstr ""
+
+msgctxt "#32131"
+msgid "Download Rain Map"
+msgstr ""
+
+msgctxt "#32132"
+msgid "Download Clouds Map"
+msgstr ""
+
+msgctxt "#32133"
+msgid "Download Snow Map"
+msgstr ""
+
+msgctxt "#32134"
+msgid "Download Wind Map"
+msgstr ""
+
+msgctxt "#32135"
+msgid "Download Pressure Map"
+msgstr ""
+
+msgctxt "#32136"
+msgid "Download Precipitation Map"
+msgstr ""
+
+# Empty strings
+
+msgctxt "#32150"
+msgid "Temperature"
+msgstr ""
+
+msgctxt "#32151"
+msgid "System Default"
+msgstr ""
+
+msgctxt "#32152"
+msgid "Degree Celsius (C)"
+msgstr ""
+
+msgctxt "#32153"
+msgid "Degree Fahrenheit (F)"
+msgstr ""
+
+msgctxt "#32154"
+msgid "Kelvin (K)"
+msgstr ""
+
+msgctxt "#32155"
+msgid "Wind speed"
+msgstr ""
+
+msgctxt "#32156"
+msgid "meter per second (m/s)"
+msgstr ""
+
+msgctxt "#32157"
+msgid "kilometer per hour (km/h)"
+msgstr ""
+
+msgctxt "#32158"
+msgid "miles per hour (mph)"
+msgstr ""
+
+msgctxt "#32159"
+msgid "knots (kn)"
+msgstr ""
+
+msgctxt "#32160"
+msgid "beaufort scale (bft)"
+msgstr ""
+
+msgctxt "#32180"
+msgid "North-northeast"
+msgstr ""
+
+msgctxt "#32181"
+msgid "Northeast"
+msgstr ""
+
+msgctxt "#32182"
+msgid "East-northeast"
+msgstr ""
+
+msgctxt "#32183"
+msgid "East"
+msgstr ""
+
+msgctxt "#32184"
+msgid "East-southeast"
+msgstr ""
+
+msgctxt "#32185"
+msgid "Southeast"
+msgstr ""
+
+msgctxt "#32186"
+msgid "South-southeast"
+msgstr ""
+
+msgctxt "#32187"
+msgid "South"
+msgstr ""
+
+msgctxt "#32188"
+msgid "South-southwest"
+msgstr ""
+
+msgctxt "#32189"
+msgid "Southwest"
+msgstr ""
+
+msgctxt "#32190"
+msgid "West-southwest"
+msgstr ""
+
+msgctxt "#32191"
+msgid "West"
+msgstr ""
+
+msgctxt "#32192"
+msgid "West-northwest"
+msgstr ""
+
+msgctxt "#32193"
+msgid "Northwest"
+msgstr ""
+
+msgctxt "#32194"
+msgid "North-northwest"
+msgstr ""
+
+msgctxt "#32195"
+msgid "North"
+msgstr ""
+
+msgctxt "#32196"
+msgid "from"
+msgstr ""

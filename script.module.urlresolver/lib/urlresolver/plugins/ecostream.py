@@ -15,9 +15,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import urllib2
-from lib import helpers
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
@@ -54,7 +54,6 @@ class EcostreamResolver(UrlResolver):
                 raise ResolverError('Formvaluepart not found')
             found_parts.append(r.group(1))
         tpm = ''.join(found_parts)
-        
         # emulate click on button "Start Stream"
         headers = ({'Referer': web_url, 'X-Requested-With': 'XMLHttpRequest', 'User-Agent': common.IE_USER_AGENT})
         web_url = 'http://www.ecostream.tv' + post_url
@@ -67,7 +66,17 @@ class EcostreamResolver(UrlResolver):
         stream_url = urllib2.unquote(stream_url)
         stream_url = urllib2.urlopen(urllib2.Request(stream_url, headers=headers)).geturl()
 
-        return stream_url + helpers.append_headers({'User-Agent': common.IE_USER_AGENT})
+        return stream_url
 
     def get_url(self, host, media_id):
         return 'http://www.ecostream.tv/stream/%s.html' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

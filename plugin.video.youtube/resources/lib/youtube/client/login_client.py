@@ -1,31 +1,15 @@
 __author__ = 'bromix'
 
-import xbmcaddon
 import time
 import urlparse
 
-from random import randint
 from resources.lib.kodion import simple_requests as requests
 from resources.lib.youtube.youtube_exceptions import LoginException
-from resources.lib.youtube.helper.yt_change_api import Change_API
 
-addon = xbmcaddon.Addon()
-api = Change_API()
-if addon.getSetting('youtube.api.lastused.last_login') == '':
-    api.new_login()
-    pass
-
-api_last_login = addon.getSetting('youtube.api.lastused.last_login')
-api_error = addon.getSetting('youtube.api.lastused.error')
-api_secret = api.get_api_secret(api_error, api_last_login)
-api_key = api.get_api_key(api_error, api_last_login)
-api_id = api.get_api_id(api_error, api_last_login)
-
-# Kodi 17 support by Uukrul
 
 class LoginClient(object):
     CONFIGS = {
-         'youtube-tv': {
+        'youtube-tv': {
             'system': 'All',
             'key': 'AIzaSyAd-YEOqZz9nXVzGtn3KWzYLbLaajhqIDA',
             'id': '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com',
@@ -35,57 +19,83 @@ class LoginClient(object):
         'youtube-for-kodi-quota': {
             'token-allowed': False,
             'system': 'All',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyA7v1QOHz8Q4my5J8uGSpr0zRrntRjnMmk',
+            'id': '597640352045-7um2gr1v5rgobm5bf07ebesm3er48286.apps.googleusercontent.com',
+            'secret': 'VmyQ12KkJ_N3yegu4Y-VGCXd'
         },
         'youtube-for-kodi-fallback': {
             'token-allowed': False,
             'system': 'Fallback!',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyBEvxICg_E5g8mfndYjWHH4WEDF2fN_zXM',
+            'id': '705000440035-f7v8mhn75udt6l20r75ko7f15c39ns1c.apps.googleusercontent.com',
+            'secret': 'XeLKD8o_mdzEBDy9Nw5KMKbr'
         },
         'youtube-for-kodi-12': {
             'system': 'Frodo',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyB6-pMlWO_XmgdM15VKGeLH4QsipdToBas',
+            'id': '131835494776-s0ef9jorci9vl0kaa5sqslupqvlku6ej.apps.googleusercontent.com',
+            'secret': 'Fz9nnfVGoH6jiLc0iefvzZYM'
         },
         'youtube-for-kodi-13': {
             'system': 'Gotham',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyB6-pMlWO_XmgdM15VKGeLH4QsipdToBas',
+            'id': '131835494776-s0ef9jorci9vl0kaa5sqslupqvlku6ej.apps.googleusercontent.com',
+            'secret': 'Fz9nnfVGoH6jiLc0iefvzZYM'
         },
         'youtube-for-kodi-14': {
             'system': 'Helix',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyCOxb_JvsI1-ZneJ2SXTkwZvW3fdtaR3bg',
+            'id': '45906745725-ucn38a9eumqcgfkmv14th17s0eq8kt5f.apps.googleusercontent.com',
+            'secret': 'sK6GK-ZhzgXWehCdjaGybHRi'
         },
         'youtube-for-kodi-15': {
             'system': 'Isengard',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyBAdxZCHbeJwnQ7dDZQJNfcaF46MdqJ24E',
+            'id': '988476436049-l9sfcivj4jtm1f2ppcvvbgsli6kvtis0.apps.googleusercontent.com',
+            'secret': '_BEENv-a3-egDz_QKo5pGZCK'
         },
         'youtube-for-kodi-16': {
             'system': 'Jarvis',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
-        },
-            'youtube-for-kodi-17': {
-            'system': 'Krypton',
-            'key': '%s' % api_key,
-            'id': '%s.apps.googleusercontent.com' % api_id,
-            'secret': '%s' % api_secret
+            'key': 'AIzaSyBbgC4PZ2_hUdqqX7MIgdg2fK1nohv1jrw',
+            'id': '17932591024-8jruv1v7s78gipo7s17c91bnk26rqgpf.apps.googleusercontent.com',
+            'secret': 'bK9T234WWhqzYdcQLif1L35K'
         }
     }
-    
-    def __init__(self, config={}, language='en-US', region='', access_token='', access_token_tv=''):
-       
+
+    CREDENTIALS_POOL = [
+        {
+            'system': 'Kodi YouTube Pool 1',
+            'key': 'kodi-youtube-pool-1',
+            'id': '761989675853-s2fmvsdjk4f57hh52phne3288pl3dd25.apps.googleusercontent.com',
+            'secret': 'i_3LGLwtSYJh2klLNNzG1lJG'
+        },
+        {
+            'system': 'Kodi YouTube Pool 2',
+            'key': 'kodi-youtube-pool-2',
+            'id': '313453013574-f7lfuf8k1tefptiv8n850bgqcbjc2dr3.apps.googleusercontent.com',
+            'secret': 'fMnkhokm0Fv5MZluc5BsXeIv'
+        },
+        {
+            'system': 'Kodi YouTube Pool 3',
+            'key': 'kodi-youtube-pool-3',
+            'id': '1081682822181-1a450qlirkjjfa8v3hgskhrdbg76c9r7.apps.googleusercontent.com',
+            'secret': 'wqJfNZBHf_xTi3dGgUpf2eaM'
+        },
+        {
+            'system': 'Kodi YouTube Pool 4',
+            'key': 'kodi-youtube-pool-4',
+            'id': '669595706732-5mdckd0b6dpbmoigg3hq6ac5u98hqiff.apps.googleusercontent.com',
+            'secret': 'Dtx20RiLmE5zTARelXma0pom'
+        },
+        {
+            'system': 'Kodi YouTube Pool 5',
+            'key': 'kodi-youtube-pool-5',
+            'id': '147802564020-8h2bs3r0e9ofoid9ame4pa1tu44k80n7.apps.googleusercontent.com',
+            'secret': 'LlFMl7WSO8CE7Lq5Yj_Ru11t'
+        }
+    ]
+
+    def __init__(self, config={}, language='en-US', access_token='', access_token_tv=''):
         if not config:
             config = self.CONFIGS['youtube-for-kodi-fallback']
             pass
@@ -99,9 +109,13 @@ class LoginClient(object):
             pass
 
         language = language.replace('-', '_')
+        language_components = language.split('_')
+        if len(language_components) != 2:
+            language = 'en_US'
+            pass
 
         self._language = language
-        self._region = region
+        self._country = language.split('_')[1]
         self._access_token = access_token
         self._access_token_tv = access_token_tv
         self._log_error_callback = None
@@ -120,7 +134,7 @@ class LoginClient(object):
             pass
         pass
 
-    def revoke(self, refresh_token, context):
+    def revoke(self, refresh_token):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',
                    'Origin': 'https://www.youtube.com',
@@ -139,7 +153,6 @@ class LoginClient(object):
 
         result = requests.post(url, data=post_data, headers=headers, verify=False)
         if result.status_code != requests.codes.ok:
-            context.log_debug('Request answer: %s' % result.text)
             raise LoginException('Logout Failed')
 
         pass
@@ -190,12 +203,12 @@ class LoginClient(object):
 
         return '', ''
 
-    def get_device_token_tv(self, code, context, client_id='', client_secret='', grant_type=''):
+    def get_device_token_tv(self, code, client_id='', client_secret='', grant_type=''):
         client_id = self.CONFIGS['youtube-tv']['id']
         client_secret = self.CONFIGS['youtube-tv']['secret']
-        return self.get_device_token(code, context, client_id=client_id, client_secret=client_secret, grant_type=grant_type)
+        return self.get_device_token(code, client_id=client_id, client_secret=client_secret, grant_type=grant_type)
 
-    def get_device_token(self, code, context, client_id='', client_secret='', grant_type=''):
+    def get_device_token(self, code, client_id='', client_secret='', grant_type=''):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',
                    'Origin': 'https://www.youtube.com',
@@ -225,7 +238,6 @@ class LoginClient(object):
 
         result = requests.post(url, data=post_data, headers=headers, verify=False)
         if result.status_code != requests.codes.ok:
-            context.log_debug('Request answer: %s' % result.text)
             raise LoginException('Login Failed')
 
         if result.headers.get('content-type', '').startswith('application/json'):
@@ -233,11 +245,11 @@ class LoginClient(object):
 
         return None
 
-    def generate_user_code_tv(self, context):
+    def generate_user_code_tv(self):
         client_id = self.CONFIGS['youtube-tv']['id']
-        return self.generate_user_code(context, client_id=client_id)
+        return self.generate_user_code(client_id=client_id)
 
-    def generate_user_code(self, context, client_id=''):
+    def generate_user_code(self, client_id=''):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',
                    'Origin': 'https://www.youtube.com',
@@ -261,7 +273,6 @@ class LoginClient(object):
 
         result = requests.post(url, data=post_data, headers=headers, verify=False)
         if result.status_code != requests.codes.ok:
-            context.log_debug('Request answer: %s' % result.text)
             raise LoginException('Login Failed')
 
         if result.headers.get('content-type', '').startswith('application/json'):
@@ -281,8 +292,8 @@ class LoginClient(object):
                    'Connection': 'Keep-Alive',
                    'Accept-Encoding': 'gzip'}
 
-        post_data = {'device_country': self._region.lower(),
-                     'operatorCountry': self._region.lower(),
+        post_data = {'device_country': self._country.lower(),
+                     'operatorCountry': self._country.lower(),
                      'lang': self._language.replace('-', '_'),
                      'sdk_version': '19',
                      # 'google_play_services_version': '6188034',

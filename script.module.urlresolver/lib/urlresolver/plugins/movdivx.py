@@ -16,37 +16,55 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from lib import helpers
+import re
+from lib import jsunpack
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
-
 class MovDivxResolver(UrlResolver):
     name = "movdivx"
-    domains = ["movdivx.com", "divxme.com", "streamflv.com"]
-    pattern = '(?://|\.)((?:movdivx|divxme|streamflv)\.com)/([0-9a-zA-Z]+)'
+    domains = ["movdivx.com"]
+    pattern = '(?://|\.)(movdivx\.com)/([0-9a-zA-Z]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        cookie = response.get_headers(as_dict=True).get('Set-Cookie', '')
-        if cookie:
-            headers.update({'Cookie': cookie})
-        html = response.content
-        
-        if html:
-            data = helpers.get_hidden(html)
-            if not "method_free" in data: data.update({'method_free': 'Submit Query'})
-            _html = self.net.http_POST(web_url, headers=headers, form_data=data).content
-            if _html:
-                sources = helpers.scrape_sources(_html, patterns=['''file:\s*["'](?P<url>[^"']+)'''])
-                if sources: return helpers.pick_source(sources) + helpers.append_headers(headers)
-                
-        raise ResolverError("Video not found")
+        html = self.net.http_GET(web_url).content
+
+        data = {}
+        for match in re.finditer('type="hidden"\s*name="([^"]+)"\s*value="([^"]+)', html):
+            key, value = match.groups()
+            data[key] = value
+        data['method_free'] = 'Continue to Stream >>'
+
+        html = self.net.http_POST(web_url, data).content
+
+        # get url from packed javascript
+        sPattern = '(eval\(function\(p,a,c,k,e,d\).*?)</script>'
+        for match in re.finditer(sPattern, html, re.DOTALL | re.IGNORECASE):
+            fragment = match.group(1)
+            js_data = jsunpack.unpack(fragment)
+            match = re.search('name="src"\s*value="([^"]+)', js_data)
+            if match:
+                return match.group(1)
+            else:
+                match = re.search('file\s*:\s*"([^"]+)', js_data)
+                if match:
+                    return match.group(1)
+
+        raise ResolverError('failed to parse link')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://streamflv.com/{media_id}')
+        return 'http://movdivx.com/%s.html' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

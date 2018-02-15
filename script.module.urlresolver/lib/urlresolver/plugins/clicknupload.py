@@ -15,8 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
+
 import re
-from lib import helpers
+import urllib
+import xbmc
 from lib import captcha_lib
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
@@ -33,26 +35,40 @@ class ClickNUploadResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'User-Agent': common.FF_USER_AGENT,
-            'Referer': web_url
-        }
-        html = self.net.http_GET(web_url, headers=headers).content
+        html = self.net.http_GET(web_url).content
         tries = 0
         while tries < MAX_TRIES:
-            data = helpers.get_hidden(html)
+            data = {}
+            r = re.findall(r'type="hidden"\s*name="([^"]+)"\s*value="([^"]+)', html)
+            for name, value in r:
+                data[name] = value
+            data['method_free'] = 'Free Download'
             data.update(captcha_lib.do_captcha(html))
+            headers = {
+                'Referer': web_url
+            }
             html = self.net.http_POST(web_url, data, headers=headers).content
-            r = re.search('''class="downloadbtn"[^>]+onClick\s*=\s*\"window\.open\('([^']+)''', html)
-            if r:
-                return r.group(1) + helpers.append_headers(headers)
-
             if tries > 0:
-                common.kodi.sleep(1000)
-                
+                xbmc.sleep(6000)
+
+            if '>File Download Link Generated<' in html:
+                r = re.search("onClick\s*=\s*\"window\.open\('([^']+)", html)
+                if r:
+                    return r.group(1) + '|' + urllib.urlencode({'User-Agent': common.IE_USER_AGENT})
+
             tries = tries + 1
 
         raise ResolverError('Unable to locate link')
 
     def get_url(self, host, media_id):
-        return 'https://clicknupload.link/%s' % media_id
+        return 'http://clicknupload.link/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

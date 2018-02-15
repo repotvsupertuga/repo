@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 openload.io urlresolver plugin
 Copyright (C) 2015 tknorris
@@ -16,96 +15,108 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
-import os
+
+import re
 import json
-import ol_gmu
+import urllib
+from lib import captcha_lib
+from lib.aa_decoder import AADecoder
 from urlresolver import common
-from urlresolver.common import i18n
 from urlresolver.resolver import UrlResolver, ResolverError
+import xbmc
 
-logger = common.log_utils.Logger.get_logger(__name__)
-logger.disable()
-
-API_BASE_URL = 'https://api.openload.co/1'
-INFO_URL = API_BASE_URL + '/streaming/info'
-GET_URL = API_BASE_URL + '/streaming/get?file={media_id}'
-FILE_URL = API_BASE_URL + '/file/info?file={media_id}'
-OL_PATH = os.path.join(common.plugins_path, 'ol_gmu.py')
 
 class OpenLoadResolver(UrlResolver):
     name = "openload"
-    domains = ["openload.io", "openload.co", "oload.tv"]
-    pattern = '(?://|\.)(o(?:pen)??load\.(?:io|co|tv))/(?:embed|f)/([0-9a-zA-Z-_]+)'
+    domains = ["openload.io", "openload.co"]
+    pattern = '(?://|\.)(openload\.(?:io|co))/(?:embed|f)/([0-9a-zA-Z-_]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
+        def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
+            return ((num == 0) and numerals[0]) or (baseN(num // b, b, numerals).lstrip(numerals[0]) + numerals[num % b])
+
+        def conv(s, addfactor=None):
+            if 'function()' in s:
+                addfactor = s.split('b.toString(')[1].split(')')[0]
+                fname = re.findall('function\(\)\{function (.*?)\(', s)[0]
+                s = s.replace(fname, 'myfunc')
+                s = ''.join(s.split('}')[1:])
+            if '+' not in s:
+                if '.0.toString' in s:
+                    ival, b = s.split('.0.toString(')
+                    b = b.replace(')', '')
+                    return baseN(int(ival), int(eval(b)))
+                elif 'myfunc' in s:
+                    b, ival = s.split('myfunc(')[1].split(',')
+                    ival = ival.replace(')', '').replace('(', '')
+                    b = b.replace(')', '').replace('(', '')
+                    b = eval(addfactor.replace('a', b))
+                    return baseN(int(ival), int(b))
+                else:
+                    return eval(s)
+            r = ''
+            for ss in s.split('+'):
+                r += conv(ss, addfactor)
+            return r
+
         try:
-            self._auto_update(self.get_setting('url'), OL_PATH, self.get_setting('key'))
-            reload(ol_gmu)
-            return ol_gmu.get_media_url(self.get_url(host, media_id))  # @UndefinedVariable
+            web_url = self.get_url(host, media_id)
+            headers = {'User-Agent': common.FF_USER_AGENT}
+            html = self.net.http_GET(web_url, headers=headers).content.encode('utf-8')
+            aaencoded = re.findall('id=\"olvideo\".*\n.*?text/javascript\">(.*)</script>', html)[0]
+            dtext = AADecoder(aaencoded).decode()
+            dtext = re.findall('window.vs=(.*?);', dtext)[0]
+            dtext = conv(dtext)
+            return dtext.replace("https", "http") + '|User-Agent=%s' % common.FF_USER_AGENT
+
         except Exception as e:
-            logger.log_debug('Exception during openload resolve parse: %s' % (e))
-            try:
-                if not self.__file_exists(media_id):
-                    raise ResolverError('File Not Available')
-                
-                video_url = self.__check_auth(media_id)
-                if not video_url:
-                    video_url = self.__auth_ip(media_id)
-            except ResolverError:
-                raise
-            
-            if video_url:
-                return video_url
-            else:
-                raise ResolverError(i18n('no_ol_auth'))
+            common.log_utils.log_debug('Exception during openload resolve parse: %s' % e)
 
-    def get_url(self, host, media_id):
-        return 'http://openload.co/embed/%s' % (media_id)
+        # Commented out because, by default, all openload videos no longer work with their API so it's a waste
+        #         try:
+        #             info_url = 'https://api.openload.io/1/file/info?file=%s' % (media_id)
+        #             js_result = self.__get_json(info_url)
+        #             if 'result' in js_result and media_id in js_result['result']:
+        #                 if js_result['result'][media_id]['status'] != 200:
+        #                     raise ResolverError('File Not Available')
+        #             ticket_url = 'https://api.openload.io/1/file/dlticket?file=%s' % (media_id)
+        #             js_result = self.__get_json(ticket_url)
+        #             video_url = 'https://api.openload.io/1/file/dl?file=%s&ticket=%s' % (media_id, js_result['result']['ticket'])
+        #             captcha_url = js_result['result'].get('captcha_url', None)
+        #             if captcha_url:
+        #                 captcha_response = captcha_lib.get_response(captcha_url)
+        #                 if captcha_response:
+        #                     video_url += '&captcha_response=%s' % urllib.quote(captcha_response)
+        #             xbmc.sleep(js_result['result']['wait_time'] * 1000)
+        #             js_result = self.__get_json(video_url)
+        #             return js_result['result']['url'] + '?mime=true'
+        #         except ResolverError:
+        #             raise
+        #         except Exception as e:
+        #             raise ResolverError('Exception in openload: %s' % (e))
 
-    def __file_exists(self, media_id):
-        js_data = self.__get_json(FILE_URL.format(media_id=media_id))
-        return js_data.get('result', {}).get(media_id, {}).get('status') == 200
-        
-    def __auth_ip(self, media_id):
-        js_data = self.__get_json(INFO_URL)
-        pair_url = js_data.get('result', {}).get('auth_url', '')
-        if pair_url:
-            pair_url = pair_url.replace('\/', '/')
-            header = i18n('ol_auth_header')
-            line1 = i18n('auth_required')
-            line2 = i18n('visit_link')
-            line3 = i18n('click_pair').decode('utf-8') % (pair_url)
-            with common.kodi.CountdownDialog(header, line1, line2, line3) as cd:
-                return cd.start(self.__check_auth, [media_id])
-        
-    def __check_auth(self, media_id):
-        try:
-            js_data = self.__get_json(GET_URL.format(media_id=media_id))
-        except ResolverError as e:
-            status, msg = e
-            if status == 403:
-                return
-            else:
-                raise ResolverError(msg)
-        
-        return js_data.get('result', {}).get('url')
-    
+        raise ResolverError('Unable to resolve openload.io link. Filelink not found.')
+
     def __get_json(self, url):
         result = self.net.http_GET(url).content
-        common.logger.log(result)
         js_result = json.loads(result)
+        common.log_utils.log_debug(js_result)
         if js_result['status'] != 200:
-            raise ResolverError(js_result['status'], js_result['msg'])
+            raise ResolverError(js_result['msg'])
         return js_result
 
-    @classmethod
-    def get_settings_xml(cls):
-        xml = super(cls, cls).get_settings_xml()
-        xml.append('<setting id="%s_auto_update" type="bool" label="%s" default="true"/>' % (cls.__name__, i18n('auto_update')))
-        xml.append('<setting id="%s_url" type="text" label="    %s" default="" visible="eq(-1,true)"/>' % (cls.__name__, i18n('update_url')))
-        xml.append('<setting id="%s_key" type="text" label="    %s" default="" option="hidden" visible="eq(-2,true)"/>' % (cls.__name__, i18n('decrypt_key')))
-        xml.append('<setting id="%s_etag" type="text" default="" visible="false"/>' % (cls.__name__))
-        return xml
+    def get_url(self, host, media_id):
+        return 'http://openload.io/embed/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

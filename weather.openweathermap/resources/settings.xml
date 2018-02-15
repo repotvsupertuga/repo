@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="32101">
+		<setting id="Location1" label="32111" type="action" action="RunScript($ID,Location1)" default=""/>
+		<setting id="Location2" label="32112" type="action" action="RunScript($ID,Location2)" enable="!eq(-1,)" default=""/>
+		<setting id="Location3" label="32113" type="action" action="RunScript($ID,Location3)" enable="!eq(-1,)" default=""/>
+		<setting id="Location1id" type="text" visible="false" default=""/>
+		<setting id="Location2id" type="text" visible="false" default=""/>
+		<setting id="Location3id" type="text" visible="false" default=""/>
+	</category>
+    <category label="32102">
+        <setting id="Zoom" label="32120" type="slider" option="int" range="1,12"  default="8"/>
+        <setting id="OverlayTransparency" label="32121" type="slider" option="int" range="0,5,100"  default="30"/>
+        <setting id="BackgroundProvider" label="32122" type="enum" values="OpenStreetMap|OpenCycleMap|MapQuest|MapQuest Open Aerial"/>
+		<setting id="AddMarker" label="32123" type="bool" default="true"/>
+        <setting id="TempMap" label="32130" type="bool" default="true"/>
+        <setting id="RainMap" label="32131" type="bool" default="false"/>
+        <setting id="CloudsMap" label="32132" type="bool" default="false"/>
+        <setting id="SnowMap" label="32133" type="bool" default="false"/>
+        <setting id="WindMap" label="32134" type="bool" default="false"/>
+        <setting id="PressureMap" label="32135" type="bool" default="false"/>
+        <setting id="PrecipitationMap" label="32136" type="bool" default="false"/>
+	</category>
+    <category label="32103">
+        <setting id="UnitTemperature" label="32150" type="enum" lvalues="32151|32152|32153|32154" visible="true"/>
+        <setting id="UnitWindSpeed" label="32155" type="enum" lvalues="32151|32156|32157|32158|32159|32160"/>
+	</category>
+</settings>

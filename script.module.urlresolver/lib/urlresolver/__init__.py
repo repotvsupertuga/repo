@@ -27,27 +27,19 @@ For most cases you probably want to use :func:`urlresolver.resolve` or
 
 
 '''
-import re
-import urlparse
 import sys
 import os
-import xbmc
-import xbmcvfs
 import xbmcgui
 import common
+import xml.dom.minidom
 from hmf import HostedMediaFile
 from urlresolver.resolver import UrlResolver
-from urlresolver.plugins.__generic_resolver__ import GenericResolver
 from plugins import *
 
-common.logger.log_notice('Initializing URLResolver version: %s' % (common.addon_version))
+common.log_utils.log_notice('Initializing URLResolver version: %s' % (common.addon_version))
 MAX_SETTINGS = 75
 
 PLUGIN_DIRS = []
-host_cache = {}
-
-# Terrible hack to allow hmf to set a global var to stop pop-ups for all resolvers during resolve()
-ALLOW_POPUPS = True
 
 def add_plugin_dirs(dirs):
     global PLUGIN_DIRS
@@ -58,37 +50,34 @@ def add_plugin_dirs(dirs):
 
 def load_external_plugins():
     for d in PLUGIN_DIRS:
-        common.logger.log_debug('Adding plugin path: %s' % (d))
+        common.log_utils.log_debug('Adding plugin path: %s' % (d))
         sys.path.insert(0, d)
         for filename in os.listdir(d):
             if not filename.startswith('__') and filename.endswith('.py'):
                 mod_name = filename[:-3]
                 imp = __import__(mod_name, globals(), locals())
                 sys.modules[mod_name] = imp
-                common.logger.log_debug('Loaded %s as %s from %s' % (imp, mod_name, filename))
+                common.log_utils.log_debug('Loaded %s as %s from %s' % (imp, mod_name, filename))
 
 def relevant_resolvers(domain=None, include_universal=None, include_external=False, include_disabled=False, order_matters=False):
     if include_external:
         load_external_plugins()
-    
-    if isinstance(domain, basestring):
-        domain = domain.lower()
 
     if include_universal is None:
         include_universal = common.get_setting('allow_universal') == "true"
         
-    classes = UrlResolver.__class__.__subclasses__(UrlResolver) + UrlResolver.__class__.__subclasses__(GenericResolver)
+    classes = UrlResolver.__class__.__subclasses__(UrlResolver)
     relevant = []
     for resolver in classes:
         if include_disabled or resolver._is_enabled():
             if include_universal or not resolver.isUniversal():
-                if domain is None or ((domain and any(domain in res_domain.lower() for res_domain in resolver.domains)) or '*' in resolver.domains):
+                if domain is None or (any(domain in res_domain for res_domain in resolver.domains) or '*' in resolver.domains):
                     relevant.append(resolver)
 
     if order_matters:
         relevant.sort(key=lambda x: x._get_priority())
 
-    common.logger.log_debug('Relevant Resolvers: %s' % (relevant))
+    common.log_utils.log_debug('Relevant Resolvers: %s' % (relevant))
     return relevant
 
 def resolve(web_url):
@@ -173,7 +162,7 @@ def choose_source(sources):
     '''
     sources = filter_source_list(sources)
     if not sources:
-        common.logger.log_warning('no playable streams found')
+        common.log_utils.log_warning('no playable streams found')
         return False
     elif len(sources) == 1:
         return sources[0]
@@ -184,43 +173,6 @@ def choose_source(sources):
             return sources[index]
         else:
             return False
-
-def scrape_supported(html, regex=None, host_only=False):
-    '''
-    returns a list of links scraped from the html that are supported by urlresolver
-    
-    args:
-        html: the html to be scraped
-        regex: an optional argument to override the default regex which is: href\s*=\s*["']([^'"]+
-        host_only: an optional argument if true to do only host validation vs full url validation (default False)
-    
-    Returns:
-        a list of links scraped from the html that passed validation
-    
-    '''
-    if regex is None: regex = '''href\s*=\s*['"]([^'"]+)'''
-    links = []
-    for match in re.finditer(regex, html):
-        stream_url = match.group(1)
-        host = urlparse.urlparse(stream_url).hostname
-        if host_only:
-            if host is None:
-                continue
-            
-            if host in host_cache:
-                if host_cache[host]:
-                    links.append(stream_url)
-                continue
-            else:
-                hmf = HostedMediaFile(host=host, media_id='dummy')  # use dummy media_id to allow host validation
-        else:
-            hmf = HostedMediaFile(url=stream_url)
-        
-        is_valid = hmf.valid_url()
-        host_cache[host] = is_valid
-        if is_valid:
-            links.append(stream_url)
-    return links
 
 def display_settings():
     '''
@@ -251,42 +203,39 @@ def _update_settings_xml():
     new_xml = [
         '<?xml version="1.0" encoding="utf-8" standalone="yes"?>',
         '<settings>',
-        '\t<category label="URLResolver">',
-        '\t\t<setting default="true" id="allow_universal" label="%s" type="bool"/>' % (common.i18n('enable_universal')),
-        '\t\t<setting default="true" id="auto_pick" label="%s" type="bool"/>' % (common.i18n('auto_pick')),
-        '\t\t<setting default="true" id="use_cache" label="%s" type="bool"/>' % (common.i18n('use_function_cache')),
-        '\t\t<setting id="reset_cache" type="action" label="%s" action="RunPlugin(plugin://script.module.urlresolver/?mode=reset_cache)"/>' % (common.i18n('reset_function_cache')),
-        '\t\t<setting id="personal_nid" label="Your NID" type="text" visible="false" default=""/>',
-        '\t\t<setting id="last_ua_create" label="last_ua_create" type="number" visible="false" default="0"/>',
-        '\t\t<setting id="current_ua" label="current_ua" type="text" visible="false" default=""/>',
-        '\t\t<setting id="addon_debug" label="addon_debug" type="bool" visible="false" default="false"/>',
-        '\t</category>',
-        '\t<category label="%s">' % (common.i18n('universal_resolvers'))]
+        '<category label="URLResolver">',
+        '<setting default="true" id="allow_universal" label="Enable Universal Resolvers" type="bool"/>',
+        '<setting default="true" id="use_cache" label="Use Function Cache" type="bool"/>',
+        '<setting id="reset_cache" type="action" label="Reset Function Cache" action="RunPlugin(plugin://script.module.urlresolver/?mode=reset_cache)"/>',
+        '<setting id="personal_nid" label="Your NID" type="text" visible="false"/>',
+        '</category>',
+        '<category label="Universal Resolvers">']
 
     resolvers = relevant_resolvers(include_universal=True, include_disabled=True)
     resolvers = sorted(resolvers, key=lambda x: x.name.upper())
     for resolver in resolvers:
         if resolver.isUniversal():
-            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % (resolver.name))
-            new_xml += ['\t\t' + line for line in resolver.get_settings_xml()]
-    new_xml.append('\t</category>')
-    new_xml.append('\t<category label="%s 1">' % (common.i18n('resolvers')))
+            new_xml.append('<setting label="%s" type="lsep"/>' % (resolver.name))
+            new_xml += resolver.get_settings_xml()
+    new_xml.append('</category>')
+    new_xml.append('<category label="Resolvers 1">')
 
     i = 0
     cat_count = 2
     for resolver in resolvers:
         if not resolver.isUniversal():
-            if i > MAX_SETTINGS:
-                new_xml.append('\t</category>')
-                new_xml.append('\t<category label="%s %s">' % (common.i18n('resolvers'), cat_count))
+            if i <= MAX_SETTINGS:
+                new_xml.append('<setting label="%s" type="lsep"/>' % (resolver.name))
+                res_xml = resolver.get_settings_xml()
+                new_xml += res_xml
+                i += len(res_xml) + 1
+            else:
+                new_xml.append('</category>')
+                new_xml.append('<category label="Resolvers %s">' % (cat_count))
                 cat_count += 1
                 i = 0
-            new_xml.append('\t\t<setting label="%s" type="lsep"/>' % (resolver.name))
-            res_xml = resolver.get_settings_xml()
-            new_xml += ['\t\t' + line for line in res_xml]
-            i += len(res_xml) + 1
 
-    new_xml.append('\t</category>')
+    new_xml.append('</category>')
     new_xml.append('</settings>')
 
     try:
@@ -295,15 +244,17 @@ def _update_settings_xml():
     except:
         old_xml = ''
 
-    new_xml = '\n'.join(new_xml)
+    new_xml = ''.join(new_xml)
+    new_xml = xml.dom.minidom.parseString(new_xml)
+    new_xml = new_xml.toprettyxml()
     if old_xml != new_xml:
-        common.logger.log_debug('Updating Settings XML')
+        common.log_utils.log_debug('Updating Settings XML')
         try:
             with open(common.settings_file, 'w') as f:
                 f.write(new_xml)
         except:
             raise
     else:
-        common.logger.log_debug('No Settings Update Needed')
+        common.log_utils.log_debug('No Settings Update Needed')
 
 _update_settings_xml()

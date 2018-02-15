@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.program.tvsupertuga.notifications" version="0.0.1"
-       name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR] [COLOR limegreen]notifications[/COLOR]" provider-name="TEAM TUGA 4EVER">
+<addon id="plugin.program.tvsupertuga.notifications" version="0.0.2"
+       name="[COLOR cyan]TV[/COLOR]-[COLOR red]supertuga[/COLOR] [COLOR limegreen]notifications[/COLOR]" provider-name="Team TVsupertuga">
   <requires>
   	<import addon="xbmc.python" version="2.1.0"/>
   	<import addon="script.module.addon.common" optional="true" />
@@ -11,10 +11,11 @@
   <extension point="xbmc.service" library="service.py" start="startup">
   </extension>
   <extension point="xbmc.addon.metadata">
+    <provides>all</provides>
   	<summary>TVsupertuga NEWS</summary>
   	<description>HERE YOU CAN FIND THE LATEST NEWS OF TVsupertuga.</description>
   	<disclaimer>WE TAKE NO RESPONSIBILITY FOR ANY PROBLEMS THIS PLUGIN MAY CAUSE.</disclaimer>
-  	<language>en</language>
+  	<language>pt</language>
   	<platform>all</platform>
   	<website></website>
   	<source></source>

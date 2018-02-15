@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <addon id="repository.TheMisterRepository" name="[B][COLOR dodgerblue]Mister-X[/COLOR][/B] Official Repository" version="1.0.3" provider-name="Mister-X">
+        <extension point="xbmc.addon.repository" name="Mister-X Repo">
+			<dir>
+				<info compressed="false">https://offshoregit.com/tvaresolvers/tva-common-repository/raw/master/addons.xml</info>
+				<checksum>https://offshoregit.com/tvaresolvers/tva-common-repository/raw/master/addons.xml.md5</checksum>
+				<datadir zip="true">https://offshoregit.com/tvaresolvers/tva-common-repository/raw/master/zips/</datadir>
+			</dir>	
+            <info compressed="false">https://offshoregit.com/themister/addons.xml</info>
+            <checksum>https://offshoregit.com/themister/addons.xml.md5</checksum>
+            <datadir zip="true">https://offshoregit.com/themister/zips</datadir>
+            <hashes>false</hashes>
+        </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>The Official Repository of Mister-X</summary>
+        <description>This Repository contains all Addons made by Mister-X.</description>
+        <platform>all</platform>
+    </extension>
+</addon>

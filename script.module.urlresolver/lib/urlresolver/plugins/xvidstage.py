@@ -16,35 +16,46 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from lib import helpers
+import re
+from lib import jsunpack
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
-
 class XvidstageResolver(UrlResolver):
     name = "xvidstage"
-    domains = ["xvidstage.com", "faststream.ws"]
-    pattern = '(?://|\.)((?:xvidstage\.com|faststream\.ws))/(?:embed-)?([0-9A-Za-z]+)'
+    domains = ["xvidstage.com"]
+    pattern = '(?://|\.)(xvidstage\.com)/(?:embed-|)?([0-9A-Za-z]+)'
 
     def __init__(self):
         self.net = common.Net()
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        html = response.content
-        data = helpers.get_hidden(html)
-        headers['Cookie'] = response.get_headers(as_dict=True).get('Set-Cookie', '')
-        html = self.net.http_POST(web_url, headers=headers, form_data=data).content
 
-        if html:
-            packed = helpers.get_packed_data(html)
+        html = self.net.http_GET(web_url).content
 
-            sources = helpers.scrape_sources(packed, result_blacklist=['tmp'])
-            if sources: return helpers.pick_source(sources) + helpers.append_headers(headers)
+        for match in re.finditer('(eval.*?\)\)\))', html, re.DOTALL):
+            js_data = jsunpack.unpack(match.group(1))
+            js_data = js_data.replace('\\\'', '\'')
 
-        raise ResolverError('Unable to locate video')
+            stream_url = re.findall('<param\s+name="src"\s*value="([^"]+)', js_data)
+            stream_url += re.findall("'file'\s*,\s*'(.+?)'", js_data)
+            stream_url = [i for i in stream_url if not i.endswith('.srt')]
+
+            if stream_url:
+                return stream_url[0]
+
+        raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://www.xvidstage.com/{media_id}')
+        return 'http://www.xvidstage.com/embed-%s.html' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

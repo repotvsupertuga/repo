@@ -1,0 +1,20 @@
+[B]12/06/2016 - Versão 2.3c[/B] 
+- Adicionada categoria Desporto Global e dois novos canais do Youtube
+
+
+[B]21/05/2016 - Versão 2.2[/B] 
+- Eliminada a obrigação de Login no Youtube
+ Pequena atualização das capas para 450x300. Adicionada mais uma categoria
+
+
+[B]19/05/2016 - Versão 2.1[/B] 
+- Pequena atualização das capas para 500x300. Adicionada mais uma categoria
+
+[B]18/05/2016 - Versão 2.0[/B] 
+- Renovação total. Novo Logo, novas Fanarts e novas capas adaptadas à skin aeon nox 5
+
+[B]15/05/2016 - Versão 1.0[/B] 
+- Versão Final totalmente remodelada e com canais adicionados
+
+[B]13/05/2016 - Versão 0.0.1 [TESTE ][/B] 
+- 1ª versão com apoio de abertura do do canal no Youtube PT DocS HD

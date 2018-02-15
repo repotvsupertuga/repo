@@ -18,7 +18,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import re
 import base64
-from lib import helpers
 from urlresolver import common
 from urlresolver.resolver import UrlResolver
 
@@ -33,9 +32,8 @@ class SpeedVideoResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
 
-        html = self.net.http_GET(web_url, headers=headers).content
+        html = self.net.http_GET(web_url).content
 
         a = re.compile('var\s+linkfile *= *"(.+?)"').findall(html)[0]
         b = re.compile('var\s+linkfile *= *base64_decode\(.+?\s+(.+?)\)').findall(html)[0]
@@ -44,7 +42,17 @@ class SpeedVideoResolver(UrlResolver):
         stream_url = a[:int(c)] + a[(int(c) + 10):]
         stream_url = base64.b64decode(stream_url)
 
-        return stream_url + helpers.append_headers(headers)
+        return stream_url
 
     def get_url(self, host, media_id):
         return 'http://speedvideo.net/embed-%s.html' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

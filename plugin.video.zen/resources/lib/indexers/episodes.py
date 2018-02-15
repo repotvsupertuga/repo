@@ -36,7 +36,7 @@ action = params.get('action')
 class seasons:
     def __init__(self):
         self.list = []
-        self.show_specials = control.setting('show_specials')
+
         self.lang = 'en'
         self.datetime = (datetime.datetime.utcnow() - datetime.timedelta(hours = 5))
         self.today_date = (self.datetime).strftime('%Y-%m-%d')
@@ -134,15 +134,15 @@ class seasons:
                 artwork = zip.read('banners.xml')
                 zip.close()
 
-            # if not lang == 'en':
-                # url = self.tvdb_info_link % (tvdb, lang)
-                # data = urllib2.urlopen(url, timeout=30).read()
+            if not lang == 'en':
+                url = self.tvdb_info_link % (tvdb, lang)
+                data = urllib2.urlopen(url, timeout=30).read()
 
-                # zip = zipfile.ZipFile(StringIO.StringIO(data))
-                # result2 = zip.read('%s.xml' % lang)
-                # zip.close()
-            # else:
-            result2 = result
+                zip = zipfile.ZipFile(StringIO.StringIO(data))
+                result2 = zip.read('%s.xml' % lang)
+                zip.close()
+            else:
+                result2 = result
 
 
             artwork = artwork.split('<Banner>')
@@ -156,7 +156,7 @@ class seasons:
             item = result[0] ; item2 = result2[0]
 
             episodes = [i for i in result if '<EpisodeNumber>' in i]
-            if  self.show_specials == 'false': episodes = [i for i in episodes if not '<SeasonNumber>0</SeasonNumber>' in i]
+            episodes = [i for i in episodes if not '<SeasonNumber>0</SeasonNumber>' in i]
             episodes = [i for i in episodes if not '<EpisodeNumber>0</EpisodeNumber>' in i]
 
             seasons = [i for i in episodes if '<EpisodeNumber>1</EpisodeNumber>' in i]
@@ -269,21 +269,19 @@ class seasons:
 
         for item in seasons:
             try:
-                
                 premiered = client.parseDOM(item, 'FirstAired')[0]
                 if premiered == '' or '-00' in premiered: premiered = '0'
                 premiered = client.replaceHTMLCodes(premiered)
                 premiered = premiered.encode('utf-8')
-                
 
-                # if status == 'Ended': pass
-                # elif premiered == '0': raise Exception()
-                # elif int(re.sub('[^0-9]', '', str(premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))): raise Exception()
-                # print("TVDB SEASONS status",status)
+                if status == 'Ended': pass
+                elif premiered == '0': raise Exception()
+                elif int(re.sub('[^0-9]', '', str(premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))): raise Exception()
+
                 season = client.parseDOM(item, 'SeasonNumber')[0]
                 season = '%01d' % int(season)
                 season = season.encode('utf-8')
-                
+
                 thumb = [i for i in artwork if client.parseDOM(i, 'Season')[0] == season]
                 try: thumb = client.parseDOM(thumb[0], 'BannerPath')[0]
                 except: thumb = ''
@@ -294,8 +292,7 @@ class seasons:
 
                 if thumb == '0': thumb = poster
 
-                self.list.append({'season': season, 'tvshowtitle': tvshowtitle, 'label': label, 'original_year': year, 'year': premiered, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'cast': cast, 'plot': plot, 'code': imdb, 'imdb': imdb, 'tmdb': '0', 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
-                
+                self.list.append({'season': season, 'tvshowtitle': tvshowtitle, 'label': label, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'cast': cast, 'plot': plot, 'code': imdb, 'imdb': imdb, 'tmdb': '0', 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
             except:
                 pass
 
@@ -307,9 +304,9 @@ class seasons:
                 premiered = client.replaceHTMLCodes(premiered)
                 premiered = premiered.encode('utf-8')
 
-                # if status == 'Ended': pass
-                # elif premiered == '0': raise Exception()
-                # elif int(re.sub('[^0-9]', '', str(premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))): raise Exception()
+                if status == 'Ended': pass
+                elif premiered == '0': raise Exception()
+                elif int(re.sub('[^0-9]', '', str(premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))): raise Exception()
 
                 season = client.parseDOM(item, 'SeasonNumber')[0]
                 season = '%01d' % int(season)
@@ -376,7 +373,7 @@ class seasons:
                 try: episodeplot = episodeplot.encode('utf-8')
                 except: pass
 
-                self.list.append({'title': title, 'label': label, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'original_year': year, 'year': premiered, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': episodeplot, 'code': imdb, 'imdb': imdb, 'tmdb': '0', 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
+                self.list.append({'title': title, 'label': label, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': status, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': episodeplot, 'code': imdb, 'imdb': imdb, 'tmdb': '0', 'tvdb': tvdb, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
             except:
                 pass
 
@@ -421,7 +418,7 @@ class seasons:
                 systitle = sysname = urllib.quote_plus(i['tvshowtitle'])
                 sysimage = urllib.quote_plus(i['thumb'])
 
-                imdb, tvdb, year, season = i['imdb'], i['tvdb'], i['original_year'], i['season']
+                imdb, tvdb, year, season = i['imdb'], i['tvdb'], i['year'], i['season']
 
 
                 poster, banner, fanart, thumb = i['poster'], i['banner'], i['fanart'], i['thumb']
@@ -504,8 +501,7 @@ class seasons:
 class episodes:
     def __init__(self):
         self.list = []
-        self.episodes_colours = control.setting('episodes_colours')
-        self.episodes_notaired = control.setting('episodes_notaired')
+
         self.trakt_link = 'http://api-v2launch.trakt.tv'
         self.tvdb_key = base64.urlsafe_b64decode('MUQ2MkYyRjkwMDMwQzQ0NA==')
         self.datetime = (datetime.datetime.utcnow() - datetime.timedelta(hours = 5))
@@ -731,7 +727,7 @@ class episodes:
                 plot = client.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
 
-                itemlist.append({'title': title, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'original_year': year, 'year': premiered, 'premiered': premiered, 'status': 'Continuing', 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'thumb': thumb})
+                itemlist.append({'title': title, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': 'Continuing', 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'plot': plot, 'imdb': imdb, 'tvdb': tvdb, 'poster': poster, 'thumb': thumb})
             except:
                 pass
 
@@ -1224,25 +1220,15 @@ class episodes:
         for i in items:
             try:
                 if not 'label' in i: i['label'] = i['title']
-                date_premiered = i['premiered']
+
                 if i['label'] == '0':
                     label = '%sx%02d . %s %s' % (i['season'], int(i['episode']), 'Episode', i['episode'])
                 else:
                     label = '%sx%02d . %s' % (i['season'], int(i['episode']), i['label'])
                 if multi == True:
                     label = '%s - %s' % (i['tvshowtitle'], label)
-					
-                if self.episodes_notaired == 'true':
-					if self.episodes_colours == '0': label2 = '[COLOR gold][I]%s[/I][/COLOR]' % label
-					elif self.episodes_colours == '1': label2 = '[COLOR green][I]%s[/I][/COLOR]' % label
-					elif self.episodes_colours == '2': label2 = '[COLOR red][I]%s[/I][/COLOR]' % label
-					else: label2 = '[I]%s[/I]' % label
-								
-					if int(re.sub('[^0-9]', '', str(date_premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))):  label = label2
-                else:
-					if int(re.sub('[^0-9]', '', str(date_premiered))) > int(re.sub('[^0-9]', '', str(self.today_date))):  raise Exception()
-				
-                imdb, tvdb, year, season, episode = i['imdb'], i['tvdb'], i['original_year'], i['season'], i['episode']
+
+                imdb, tvdb, year, season, episode = i['imdb'], i['tvdb'], i['year'], i['season'], i['episode']
 
                 systitle = urllib.quote_plus(i['title'])
                 systvshowtitle = urllib.quote_plus(i['tvshowtitle'])

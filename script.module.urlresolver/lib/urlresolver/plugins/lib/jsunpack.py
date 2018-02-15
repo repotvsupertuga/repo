@@ -1,42 +1,39 @@
 """
     urlresolver XBMC Addon
     Copyright (C) 2013 Bstrdsmkr
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
+
     Adapted for use in xbmc from:
     https://github.com/einars/js-beautify/blob/master/python/jsbeautifier/unpackers/packer.py
-
-    Unpacker for Dean Edward's p.a.c.k.e.r, a part of javascript beautifier
-    by Einar Lielmanis <einar@jsbeautifier.org>
-
-        written by Stefano Sanfilippo <a.little.coder@gmail.com>
-
+    
     usage:
 
     if detect(some_string):
         unpacked = unpack(some_string)
 
-    Unpacker for Dean Edward's p.a.c.k.e.r
+
+Unpacker for Dean Edward's p.a.c.k.e.r
 """
 
 import re
-import string
 
 def detect(source):
     """Detects whether `source` is P.A.C.K.E.R. coded."""
-    return source.replace(' ', '').startswith('eval(function(p,a,c,k,e,')
+    source = source.replace(' ', '')
+    if re.search('eval\(function\(p,a,c,k,e,(?:r|d)', source): return True
+    else: return False
 
 def unpack(source):
     """Unpacks P.A.C.K.E.R. packed js code."""
@@ -52,7 +49,7 @@ def unpack(source):
 
     def lookup(match):
         """Look up symbols in the synthetic symtab."""
-        word  = match.group(0)
+        word = match.group(0)
         return symtab[unbase(word)] or word
 
     source = re.sub(r'\b\w+\b', lookup, payload)
@@ -60,20 +57,13 @@ def unpack(source):
 
 def _filterargs(source):
     """Juice from a source file the four args needed by decoder."""
-    juicers = [ (r"}\('(.*)', *(\d+), *(\d+), *'(.*)'\.split\('\|'\), *(\d+), *(.*)\)\)"),
-                (r"}\('(.*)', *(\d+), *(\d+), *'(.*)'\.split\('\|'\)"),
-              ]
-    for juicer in juicers:
-        args = re.search(juicer, source, re.DOTALL)
-        if args:
-            a = args.groups()
-            try:
-                return a[0], a[3].split('|'), int(a[1]), int(a[2])
-            except ValueError:
-                raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
+    argsregex = (r"}\('(.*)', *(\d+), *(\d+), *'(.*?)'\.split\('\|'\)")
+    args = re.search(argsregex, source, re.DOTALL).groups()
 
-    # could not find a satisfying regex
-    raise UnpackingError('Could not make sense of p.a.c.k.e.r data (unexpected code structure)')
+    try:
+        return args[0], args[3].split('|'), int(args[1]), int(args[2])
+    except ValueError:
+        raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
 
 def _replacestrings(source):
     """Strip string lookup table (list) and replace values in source."""
@@ -94,11 +84,9 @@ class Unbaser(object):
     """Functor for a given base. Will efficiently convert
     strings to natural numbers."""
     ALPHABET = {
-        56: '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz',
-        59: '0123456789abcdefghijklmnopqrstuvwABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        64: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/',
+        62: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
         95: (' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-              '[\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
+             '[\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
     }
 
     def __init__(self, base):
@@ -108,11 +96,13 @@ class Unbaser(object):
         if 2 <= base <= 36:
             self.unbase = lambda string: int(string, base)
         else:
+            if base < 62:
+                self.ALPHABET[base] = self.ALPHABET[62][0:base]
+            elif 62 < base < 95:
+                self.ALPHABET[base] = self.ALPHABET[95][0:base]
             # Build conversion dictionary cache
             try:
-                self.ALPHABET = self.ALPHABET[base] if base in self.ALPHABET else self.ALPHABET[64][0:base]
-                self.dictionary = dict((cipher, index) for
-                    index, cipher in enumerate(self.ALPHABET))
+                self.dictionary = dict((cipher, index) for index, cipher in enumerate(self.ALPHABET[base]))
             except KeyError:
                 raise TypeError('Unsupported base encoding.')
 
@@ -127,7 +117,6 @@ class Unbaser(object):
         for index, cipher in enumerate(string[::-1]):
             ret += (self.base ** index) * self.dictionary[cipher]
         return ret
-
 
 class UnpackingError(Exception):
     """Badly packed source or general error. Argument is a

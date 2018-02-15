@@ -18,13 +18,12 @@
 
 import re
 from urlresolver import common
-from lib import helpers
 from urlresolver.resolver import UrlResolver, ResolverError
 
 class MersalaResolver(UrlResolver):
     name = "mersalaayitten.com"
-    domains = ["mersalaayitten.com", "mersalaayitten.co", "mersalaayitten.us"]
-    pattern = '(?://|\.)(mersalaayitten\.(?:com|co|us))/embed/([0-9]+)'
+    domains = ["mersalaayitten.com"]
+    pattern = '(?://|\.)(mersalaayitten\.com)/embed/([0-9]+)'
 
     def __init__(self):
         self.net = common.Net()
@@ -34,23 +33,29 @@ class MersalaResolver(UrlResolver):
         resp = self.net.http_GET(web_url)
         html = resp.content
         headers = dict(resp._response.info().items())
-        headers = {'Cookie': headers['set-cookie']}
-        headers['User-Agent'] = common.FF_USER_AGENT
-        r = re.search('config=(.*?)"', html)
-
+        r = re.search("config: '(.*?)'", html)
         if r:
             stream_xml = r.group(1)
-            headers['Referer'] = 'http://mersalaayitten.us/media/nuevo/player.swf?config=%s' % stream_xml
-            response = self.net.http_GET(stream_xml, headers=headers)
+            referer = {'Referer': 'http://mersalaayitten.com/media/nuevo/player.swf'}
+            response = self.net.http_GET(stream_xml, headers=referer)
             xmlhtml = response.content
-
             r2 = re.search('<file>(.*?)</file>', xmlhtml)
+            stream_url = r2.group(1) + '|Cookie=' + headers['set-cookie']
 
-            stream_url = r2.group(1) + helpers.append_headers(headers)
         else:
             raise ResolverError('no file located')
 
         return stream_url
 
     def get_url(self, host, media_id):
-        return 'http://mersalaayitten.us/embed/%s' % media_id
+        return 'http://mersalaayitten.com/embed/%s' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

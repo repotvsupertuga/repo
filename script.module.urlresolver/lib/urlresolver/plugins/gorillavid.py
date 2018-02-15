@@ -16,10 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from lib import helpers
+import re
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
-
 
 class GorillavidResolver(UrlResolver):
     name = "gorillavid"
@@ -31,16 +30,32 @@ class GorillavidResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
-        response = self.net.http_GET(web_url, headers=headers)
-        html = response.content
-        sources = helpers.scrape_sources(html, patterns=['''["']?(?:file|url)["']?\s*[:=]\s*["'](?P<url>[^"']+)'''])
-        if not sources:
-            data = helpers.get_hidden(html)
-            headers['Cookie'] = response.get_headers(as_dict=True).get('Set-Cookie', '')
-            html = self.net.http_POST(response.get_url(), headers=headers, form_data=data).content
-            sources = helpers.scrape_sources(html, patterns=['''["']?(?:file|url)["']?\s*[:=]\s*["'](?P<url>[^"']+)'''])
-        return helpers.pick_source(sources) + helpers.append_headers(headers)
+        resp = self.net.http_GET(web_url)
+        html = resp.content
+        r = re.findall(r"<title>404 - Not Found</title>", html)
+        if r:
+            raise ResolverError('File Not Found or removed')
+        post_url = resp.get_url()
+        form_values = {}
+        for i in re.finditer('<input type="hidden" name="(.+?)" value="(.+?)">', html):
+            form_values[i.group(1)] = i.group(2)
+
+        html = self.net.http_POST(post_url, form_data=form_values).content
+        r = re.search('file: "(.+?)"', html)
+        if r:
+            return r.group(1)
+        else:
+            raise ResolverError('Unable to resolve Gorillavid link')
 
     def get_url(self, host, media_id):
         return 'http://gorillavid.in/%s' % (media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

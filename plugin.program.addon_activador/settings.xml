@@ -1,0 +1,8 @@
+<settings> 
+<setting id="api_key" type="text" label="30000" default="123456789ABCDEF"/> 
+<setting id="shared_secret" type="text" label="30001" default="123456789"/> 
+<setting id="privacy" type="bool" label="30002" default="true"/> 
+<setting id="perpage" type="enum" label="30003" values="5|10|15|20|25|30" def 
+ault="3"/> 
+<setting id="full_details" type="bool" label="30004" default="false"/> 
+</settings>

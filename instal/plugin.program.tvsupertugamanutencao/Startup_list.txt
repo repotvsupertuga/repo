@@ -1,0 +1,57 @@
+#this is a demo list file
+
+#list name
+list name=Demo list
+#unknownsources
+unknownsources=true
+#icon/fanart
+icon=https://cdn0.iconfinder.com/data/icons/presentation-training-seminar/400/Popular-17-512.png
+fanart=http://www.gamepur.com/files/images/2014/FH2-KeyArt-Horizontal-v2-CMYK-jpg.jpg
+#addons/repos
+http://mirrors.kodi.tv/addons/jarvis/script.module.routing/script.module.routing-0.2.0.zip$routing$script.module.routing
+https://github.com/XBMC-Addons/script.module.simplejson/archive/master.zip$simplejson$script.module.simplejson-master
+https://github.com/BigNoid/service.library.data.provider/archive/master.zip$library.data.provider$service.library.data.provider-master
+
+https://github.com/LS80/script.module.six/archive/master.zip$module.six$script.module.six-master
+https://github.com/Razzeee/script.module.dateutil/archive/master.zip$dateutil$script.module.dateutil-master
+https://github.com/Razzeee/script.module.arrow/archive/master.zip$arrow$script.module.arrow-master
+https://github.com/marcelveldt/script.module.simplecache/archive/master.zip$simplecache$script.module.simplecache-master
+https://github.com/beenje/script.module.requests/archive/gotham.zip$Request$script.module.requests-gotham
+https://github.com/marcelveldt/script.module.musicbrainz/archive/master.zip$musicbrainz$script.module.musicbrainz-master
+https://github.com/XBMC-Addons/script.module.beautifulsoup/archive/master.zip$beautifulsoup$script.module.beautifulsoup-master
+
+https://github.com/kodil/kodil/raw/master/repo/resource.language.he_il/resource.language.he_il-3.0.9.zip$language.he_il$resource.language.he_il
+https://github.com/samnazarko/script.module.unidecode/archive/master.zip$unidecode$script.module.unidecode-master
+
+https://github.com/ronie/script.image.resource.select/archive/master.zip$resource.select$script.image.resource.select-master
+https://github.com/ronie/script.favourites/archive/master.zip$favourites$script.favourites-master
+https://github.com/XBMC-Addons/resource.images.weatherfanart.single/archive/master.zip$weatherfanart$resource.images.weatherfanart.single-master
+
+https://github.com/XBMC-Addons/resource.images.studios.white/archive/master.zip$studios.white$resource.images.studios.white-master
+https://github.com/XBMC-Addons/resource.images.recordlabels.white/archive/master.zip$recordlabels.white$resource.images.recordlabels.white-master
+https://github.com/im85288/resource.images.languageflags.colour/archive/master.zip$languageflags.colour$resource.images.languageflags.colour-master
+https://github.com/BigNoid/script.skinshortcuts/archive/master.zip$skinshortcuts$script.skinshortcuts-master
+https://github.com/XBMC-Addons/service.xbmc.versioncheck/archive/master.zip$versioncheck$service.xbmc.versioncheck
+https://github.com/djcode/script.module.t1mlib/archive/master.zip$t1mlib$script.module.t1mlib-master
+https://github.com/marcelveldt/script.module.thetvdb/archive/master.zip$thetvdb$script.module.thetvdb-master
+https://github.com/marcelveldt/script.module.metadatautils/archive/master.zip$metadatautils$script.module.metadatautils-master
+https://github.com/marcelveldt/script.skin.helper.widgets/archive/master.zip$skin.helper.widgets$script.skin.helper.widgets-master
+https://github.com/phil65/script.module.autocompletion/archive/master.zip$autocompletion$script.module.autocompletion-master
+https://github.com/braz96/resource.images.moviegenreicons.arctic.zephyr/archive/master.zip$zephyr$resource.images.moviegenreicons.arctic.zephyr-master
+https://github.com/kodil/kodil/raw/master/repo/script.common.plugin.cache/script.common.plugin.cache-2.5.8.zip$plugin.cache$script.common.plugin.cache
+https://github.com/XBMC-Addons/script.artwork.downloader/archive/master.zip$artwork.downloader$script.artwork.downloader-master
+https://github.com/marcelveldt/script.skin.helper.colorpicker/archive/master.zip$colorpicker$script.skin.helper.colorpicker-master
+https://github.com/marcelveldt/script.skin.helper.service/archive/master.zip$skin.helper.service$script.skin.helper.service-master
+https://github.com/marcelveldt/script.skin.helper.skinbackup/archive/master.zip$skin.helper.skinbackup$script.skin.helper.skinbackup-master
+https://github.com/phil65/plugin.program.autocompletion/archive/master.zip$autocompletion$plugin.program.autocompletion-master
+
+
+http://mirrors.kodi.tv/addons/krypton/plugin.video.youtube/plugin.video.youtube-5.3.12.zip$[B][COLOR blue]Youtube[/COLOR][/B]$plugin.video.youtube
+http://mirrors.kodi.tv/addons/krypton/context.trailer/context.trailer-1.0.0.zip$[B][COLOR red]Trailer[/COLOR][/B]$context.trailer
+http://mirrors.kodi.tv/addons/krypton/plugin.video.hallmark/plugin.video.hallmark-3.0.5.zip$[B][COLOR red]Hallmark[/COLOR][/B]$plugin.video.hallmark
+https://mirror.umd.edu/xbmc/addons/krypton/skin.phenomenal/skin.phenomenal-4.2.5.zip$Phenomenal Skin$skin.phenomenal
+
+#language
+language=hebrew
+#splash screen
+splash=http://img13.deviantart.net/5407/i/2013/125/b/1/triforce_wallpaper_the_legend_of_zelda_2832807_168_by_kodi2003-d6481w8.jpg

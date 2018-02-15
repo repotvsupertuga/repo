@@ -37,8 +37,8 @@ class CastampResolver(UrlResolver):
         flashplayer = ""
         file = ""
 
-        common.logger.log("*******************************************")
-        common.logger.log("web_url: " + web_url)
+        common.log_utils.log("*******************************************")
+        common.log_utils.log("web_url: " + web_url)
 
         pattern_flashplayer = r"""'flashplayer': \"(.*?)\""""
         r = re.search(pattern_flashplayer, html)
@@ -69,3 +69,13 @@ class CastampResolver(UrlResolver):
             randomstring += chars[rnum:rnum + 1]
         domainsa = randomstring
         return 'http://www.castamp.com/embed.php?c=%s&tk=%s' % (media_id, domainsa)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

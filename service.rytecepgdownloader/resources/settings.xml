@@ -1,0 +1,13 @@
+<settings>
+    <category label="Settings">
+        <setting id="path" type="folder" label="Download Folder"/>
+        <setting id="ac" type="number" label="Activation Code"/>
+        <setting id="manual_download" type="action" label="Manual Download" action="XBMC.RunScript(service.rytecepgdownloader, manual_download)"/>
+    </category>
+    <category label="XMLTV">
+        <setting id="xmltv_1" type="select" label="XMLTV 1" values="None|Rytec Benelux XMLTV|Rytec Bulgaria XMLTV|Rytec Denmark XMLTV|Rytec Erotic XMLTV|Rytec Finland XMLTV|Rytec France XMLTV|Rytec Germany/Austria/Swiss XMLTV|Rytec Greece XMLTV|Rytec Greece in English XMLTV|Rytec Hungary XMLTV|Rytec Israel XMLTV|Rytec Italy XMLTV|Rytec Norway XMLTV|Rytec Middle East XMLTV|Rytec Poland XMLTV|Rytec Romania XMLTV|Rytec Serbia/Croatia/Montenegro XMLTV|Rytec Slovak/Czech XMLTV|Rytec Slovenia XMLTV|Rytec Spain XMLTV|Rytec Sweden XMLTV|Turkey XMLTV|Rytec UK XMLTV|Rytec Virgin UK XMLTV|Rytec Csat Africa XMLTV|Rytec Csat Reunion XMLTV|Rytec Csat Carabean XMLTV|Rytec New Caledonia XMLTV|Linuxsat ExUSSR XMLTV" default="None"/>
+        <setting id="xmltv_2" type="select" label="XMLTV 2" values="None|Rytec Benelux XMLTV|Rytec Bulgaria XMLTV|Rytec Denmark XMLTV|Rytec Erotic XMLTV|Rytec Finland XMLTV|Rytec France XMLTV|Rytec Germany/Austria/Swiss XMLTV|Rytec Greece XMLTV|Rytec Greece in English XMLTV|Rytec Hungary XMLTV|Rytec Israel XMLTV|Rytec Italy XMLTV|Rytec Norway XMLTV|Rytec Middle East XMLTV|Rytec Poland XMLTV|Rytec Romania XMLTV|Rytec Serbia/Croatia/Montenegro XMLTV|Rytec Slovak/Czech XMLTV|Rytec Slovenia XMLTV|Rytec Spain XMLTV|Rytec Sweden XMLTV|Turkey XMLTV|Rytec UK XMLTV|Rytec Virgin UK XMLTV|Rytec Csat Africa XMLTV|Rytec Csat Reunion XMLTV|Rytec Csat Carabean XMLTV|Rytec New Caledonia XMLTV|Linuxsat ExUSSR XMLTV" default="None"/>
+        <setting id="xmltv_3" type="select" label="XMLTV 3" values="None|Rytec Benelux XMLTV|Rytec Bulgaria XMLTV|Rytec Denmark XMLTV|Rytec Erotic XMLTV|Rytec Finland XMLTV|Rytec France XMLTV|Rytec Germany/Austria/Swiss XMLTV|Rytec Greece XMLTV|Rytec Greece in English XMLTV|Rytec Hungary XMLTV|Rytec Israel XMLTV|Rytec Italy XMLTV|Rytec Norway XMLTV|Rytec Middle East XMLTV|Rytec Poland XMLTV|Rytec Romania XMLTV|Rytec Serbia/Croatia/Montenegro XMLTV|Rytec Slovak/Czech XMLTV|Rytec Slovenia XMLTV|Rytec Spain XMLTV|Rytec Sweden XMLTV|Turkey XMLTV|Rytec UK XMLTV|Rytec Virgin UK XMLTV|Rytec Csat Africa XMLTV|Rytec Csat Reunion XMLTV|Rytec Csat Carabean XMLTV|Rytec New Caledonia XMLTV|Linuxsat ExUSSR XMLTV" default="None"/>
+        <setting id="xmltv_4" type="text" label="XMLTV URL" default="None"/>
+      </category>
+</settings>

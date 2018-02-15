@@ -1,0 +1,72 @@
+#[COLOR navy] Buliding List Files [/COLOR]
+#building an addons list file is very easy, 
+#the name of the list must be writen after [COLOR teal]"list name="[/COLOR] in this case [COLOR teal]"Demo list"[/COLOR]
+#the next lines order does not metter.
+#the [COLOR teal]"unknownsources"[/COLOR] will change this setting according to the value that is writing.
+#the  [COLOR teal]"splash screen"[/COLOR] will change kodi splash screen
+#next are all the repo\addons you wish to install, they must be in this structure:
+#[COLOR teal]link to addon$addon name$addon folder[/COLOR].
+#(addon name can be what ever you want displayed).
+#you can also set skin here it will install it as any other addon and will change the kodi skin to it.
+#you can also change the language of kodi by adding [COLOR teal]language=xxxx[/COLOR].
+#any line starts with [COLOR teal]"#"[/COLOR] and any blank line will be ignored.
+#[COLOR navy]b.t.w[/COLOR]
+#it will install the addons by the order they are writin here.
+#so you have to pay attention to the dependencies.
+#the list file can be local like [COLOR teal] "d:\list_file.txt"[/COLOR] or online like [COLOR teal]"http://www.ftpserver.com/listfile.txt"[/COLOR]
+#hope this will help.
+#you can see how the demo list is build here:
+#[COLOR Gold]EBS[/COLOR]
+
+#[COLOR red]list name[/COLOR]
+list name=Demo list
+#[COLOR red]unknownsources[/COLOR]
+unknownsources=true
+#[COLOR red]addons/repos[/COLOR]
+http://mirrors.kodi.tv/addons/jarvis/script.module.routing/script.module.routing-0.2.0.zip$routing$script.module.routing
+https://github.com/XBMC-Addons/script.module.simplejson/archive/master.zip$simplejson$script.module.simplejson
+https://github.com/BigNoid/service.library.data.provider/archive/master.zip$library.data.provider$service.library.data.provider
+
+https://github.com/LS80/script.module.six/archive/master.zip$module.six$script.module.six
+https://github.com/Razzeee/script.module.dateutil/archive/master.zip$dateutil$script.module.dateutil
+https://github.com/Razzeee/script.module.arrow/archive/master.zip$arrow$script.module.arrow
+https://github.com/marcelveldt/script.module.simplecache/archive/master.zip$simplecache$script.module.simplecache
+https://github.com/beenje/script.module.requests/archive/gotham.zip$Request$script.module.requests
+https://github.com/marcelveldt/script.module.musicbrainz/archive/master.zip$musicbrainz$script.module.musicbrainz
+https://github.com/XBMC-Addons/script.module.beautifulsoup/archive/master.zip$beautifulsoup$script.module.beautifulsoup
+
+https://github.com/kodil/kodil/raw/master/repo/resource.language.he_il/resource.language.he_il-3.0.9.zip$language.he_il$resource.language.he_il
+https://github.com/samnazarko/script.module.unidecode/archive/master.zip$unidecode$script.module.unidecode
+
+https://github.com/ronie/script.image.resource.select/archive/master.zip$resource.select$script.image.resource.select
+https://github.com/ronie/script.favourites/archive/master.zip$favourites$script.favourites
+https://github.com/XBMC-Addons/resource.images.weatherfanart.single/archive/master.zip$weatherfanart$resource.images.weatherfanart.single
+
+https://github.com/XBMC-Addons/resource.images.studios.white/archive/master.zip$studios.white$resource.images.studios.white
+https://github.com/XBMC-Addons/resource.images.recordlabels.white/archive/master.zip$recordlabels.white$resource.images.recordlabels.white
+https://github.com/im85288/resource.images.languageflags.colour/archive/master.zip$languageflags.colour$resource.images.languageflags.colour
+https://github.com/BigNoid/script.skinshortcuts/archive/master.zip$skinshortcuts$script.skinshortcuts
+https://github.com/XBMC-Addons/service.xbmc.versioncheck/archive/master.zip$versioncheck$service.xbmc.versioncheck
+https://github.com/djcode/script.module.t1mlib/archive/master.zip$t1mlib$script.module.t1mlib
+https://github.com/marcelveldt/script.module.thetvdb/archive/master.zip$thetvdb$script.module.thetvdb
+https://github.com/marcelveldt/script.module.metadatautils/archive/master.zip$metadatautils$script.module.metadatautils
+https://github.com/marcelveldt/script.skin.helper.widgets/archive/master.zip$skin.helper.widgets$script.skin.helper.widgets
+https://github.com/phil65/script.module.autocompletion/archive/master.zip$autocompletion$script.module.autocompletion
+https://github.com/braz96/resource.images.moviegenreicons.arctic.zephyr/archive/master.zip$zephyr$resource.images.moviegenreicons.arctic.zephyr
+https://github.com/kodil/kodil/blob/master/repo/script.common.plugin.cache/script.common.plugin.cache-2.5.8.zip$plugin.cache$script.common.plugin.cache
+https://github.com/XBMC-Addons/script.artwork.downloader/archive/master.zip$artwork.downloader$script.artwork.downloader
+https://github.com/marcelveldt/script.skin.helper.colorpicker/archive/master.zip$colorpicker$script.skin.helper.colorpicker
+https://github.com/marcelveldt/script.skin.helper.service/archive/master.zip$skin.helper.service$script.skin.helper.service
+https://github.com/marcelveldt/script.skin.helper.skinbackup/archive/master.zip$skin.helper.skinbackup$script.skin.helper.skinbackup
+
+
+
+http://mirrors.kodi.tv/addons/krypton/plugin.video.youtube/plugin.video.youtube-5.3.12.zip$[B][COLOR blue]Youtube[/COLOR][/B]$plugin.video.youtube
+http://mirrors.kodi.tv/addons/krypton/context.trailer/context.trailer-1.0.0.zip$[B][COLOR red]Trailer[/COLOR][/B]$context.trailer
+http://mirrors.kodi.tv/addons/krypton/plugin.video.hallmark/plugin.video.hallmark-3.0.5.zip$[B][COLOR red]Hallmark[/COLOR][/B]$plugin.video.hallmark
+https://mirror.umd.edu/xbmc/addons/krypton/skin.phenomenal/skin.phenomenal-4.2.5.zip$Phenomenal Skin$skin.phenomenal
+
+#[COLOR red]language[/COLOR]
+language=hebrew
+#[COLOR red]splash screen[/COLOR]
+splash=http://img13.deviantart.net/5407/i/2013/125/b/1/triforce_wallpaper_the_legend_of_zelda_2832807_168_by_kodi2003-d6481w8.jpg

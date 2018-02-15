@@ -1,6 +1,4 @@
 import log_utils
-logger = log_utils.Logger.get_logger(__name__)
-logger.disable()
 
 class URL_Dispatcher:
     def __init__(self):
@@ -29,14 +27,14 @@ class URL_Dispatcher:
         def decorator(f):
             if mode in self.func_registry:
                 message = 'Error: %s already registered as %s' % (str(f), mode)
-                logger.log(message, log_utils.LOGERROR)
+                log_utils.log(message, log_utils.LOGERROR)
                 raise Exception(message)
 
-            # logger.log('registering function: |%s|->|%s|' % (mode,str(f)), xbmc.LOGDEBUG)
+            # log_utils.log('registering function: |%s|->|%s|' % (mode,str(f)), xbmc.LOGDEBUG)
             self.func_registry[mode.strip()] = f
             self.args_registry[mode] = args
             self.kwargs_registry[mode] = kwargs
-            # logger.log('registering args: |%s|-->(%s) and {%s}' % (mode, args, kwargs), xbmc.LOGDEBUG)
+            # log_utils.log('registering args: |%s|-->(%s) and {%s}' % (mode, args, kwargs), xbmc.LOGDEBUG)
 
             return f
         return decorator
@@ -50,7 +48,7 @@ class URL_Dispatcher:
         """
         if mode not in self.func_registry:
             message = 'Error: Attempt to invoke unregistered mode |%s|' % (mode)
-            logger.log(message, log_utils.LOGERROR)
+            log_utils.log(message, log_utils.LOGERROR)
             raise Exception(message)
 
         args = []
@@ -65,7 +63,7 @@ class URL_Dispatcher:
                     del unused_args[arg]
                 else:
                     message = 'Error: mode |%s| requested argument |%s| but it was not provided.' % (mode, arg)
-                    logger.log(message, log_utils.LOGERROR)
+                    log_utils.log(message, log_utils.LOGERROR)
                     raise Exception(message)
 
         if self.kwargs_registry[mode]:
@@ -77,8 +75,8 @@ class URL_Dispatcher:
                     del unused_args[arg]
 
         if 'mode' in unused_args: del unused_args['mode']  # delete mode last in case it's used by the target function
-        logger.log('Calling |%s| for mode |%s| with pos args |%s| and kwargs |%s|' % (self.func_registry[mode].__name__, mode, args, kwargs))
-        if unused_args: logger.log('Warning: Arguments |%s| were passed but unused by |%s| for mode |%s|' % (unused_args, self.func_registry[mode].__name__, mode))
+        log_utils.log('Calling |%s| for mode |%s| with pos args |%s| and kwargs |%s|' % (self.func_registry[mode].__name__, mode, args, kwargs))
+        if unused_args: log_utils.log('Warning: Arguments |%s| were passed but unused by |%s| for mode |%s|' % (unused_args, self.func_registry[mode].__name__, mode))
         self.func_registry[mode](*args, **kwargs)
 
     # since all params are passed as strings, do any conversions necessary to get good types (e.g. boolean)

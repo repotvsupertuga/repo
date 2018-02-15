@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="weather.openweathermap" name="Open Weather Map" version="1.0.0.2" provider-name="bitboy">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.simplejson" version="2.0.10"/>
+		<import addon="script.module.pil" version="1.1.7"/>
+	</requires>
+	<extension point="xbmc.python.weather" library="default.py"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Weather forecast from Open Weather Map</summary>
+        <summary lang="de">Wetter Vorhersage von Open Weather Map</summary>
+        <summary lang="pl">Prognoza pogody serwisu Open Weather Map</summary>
+		<description lang="en">Weather information provided by Open Weather Map (http://openweathermap.org/) under CC-BY-SA 2.0. Fanart image by Jessie Eastland, taken from: http://commons.wikimedia.org/wiki/File:Pale_Joshua.jpg. Icon by Everaldo Coelho, taken from https://www.iconfinder.com/icons/18095/clouds_sun_weather_icon#size=256</description>
+        <description lang="de">Wetter Information angeboten von Open Weather Map (http://openweathermap.org/) lizensiert unter CC-BY-SA 2.0. Fanart von Jessie Eastland, http://commons.wikimedia.org/wiki/File:Pale_Joshua.jpg. Icon von Everaldo Coelho, https://www.iconfinder.com/icons/18095/clouds_sun_weather_icon#size=256</description>
+		<description lang="pl">Prognozę pogody dostarcza serwis Open Weather Map (http://openweathermap.org/) na licencji CC-BY-SA 2.0. Tło - http://commons.wikimedia.org/wiki/File:Pale_Joshua.jpg. Ikona - https://www.iconfinder.com/icons/18095/clouds_sun_weather_icon#size=256</description>
+		<disclaimer lang="en">This is free software and provided "as is".</disclaimer>
+        <disclaimer lang="de">Dies ist freie Software und angeboten "wie sie ist".</disclaimer>
+   		<disclaimer lang="pl">Jest to wolne oprogramowanie i dostarczane "tak jak jest".</disclaimer>
+		<language></language>
+		<platform>all</platform>
+		<forum>http://forum.xbmc.org/showthread.php?tid=180878</forum>
+		<source></source>
+	</extension>
+</addon>

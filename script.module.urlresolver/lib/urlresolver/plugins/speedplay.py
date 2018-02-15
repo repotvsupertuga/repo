@@ -15,11 +15,48 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-from __generic_resolver__ import GenericResolver
 
-class SpeedPlayResolver(GenericResolver):
+import re
+from urlresolver import common
+from urlresolver.resolver import UrlResolver, ResolverError
+
+class SpeedPlayResolver(UrlResolver):
     name = "speedplay.xyz"
-    domains = ["speedplay.xyz", "speedplay.us", "speedplay1.site",
-               "speedplay.pw", "speedplay1.pw", "speedplay3.pw", 
-               "speedplayy.site"]
-    pattern = '(?://|\.)(speedplay[0-9a-z]?\.(?:us|xyz|pw|site))/(?:embed-)?([0-9a-zA-Z]+)'
+    domains = ["speedplay.xyz", "speedplay.us"]
+    pattern = '(?://|\.)(speedplay\.(?:us|xyz))/(?:embed-)?([0-9a-zA-Z]+)'
+
+    def __init__(self):
+        self.net = common.Net()
+
+    def get_media_url(self, host, media_id):
+        web_url = self.get_url(host, media_id)
+        html = self.net.http_GET(web_url).content
+
+        if 'Not Found' in html:
+            raise ResolverError('File Removed')
+
+        if 'Video is processing' in html:
+            raise ResolverError('File still being processed')
+
+        link = re.search('(?:m3u8").*?"(.*?)"', html)
+        if link:
+            return link.group(1)
+
+        link = re.search('file:"(.*?)",', html)
+        if link:
+            return link.group(1)
+            
+        raise ResolverError('Unable to find speedplay video')
+
+    def get_url(self, host, media_id):
+        return 'http://%s/%s.html' % (host, media_id)
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

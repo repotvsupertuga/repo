@@ -15,12 +15,47 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from __generic_resolver__ import GenericResolver
 
-class UsersFilesResolver(GenericResolver):
+import re
+from lib import jsunpack
+from urlresolver import common
+from urlresolver.resolver import UrlResolver, ResolverError
+
+class UsersFilesResolver(UrlResolver):
     name = "UsersFiles"
     domains = ["usersfiles.com"]
     pattern = '(?://|\.)(usersfiles\.com)/(?:embed-)?([0-9a-zA-Z/]+)'
 
+    def __init__(self):
+        self.net = common.Net()
+        self.net.set_user_agent(common.IE_USER_AGENT)
+        self.headers = {'User-Agent': common.IE_USER_AGENT}
+
+    def get_media_url(self, host, media_id):
+        web_url = self.get_url(host, media_id)
+        html = self.net.http_GET(web_url).content
+        match = re.search('<script[^>]*>(eval.*?)</script>', html, re.DOTALL)
+        if match:
+            js_data = jsunpack.unpack(match.group(1))
+
+            stream_url = re.findall('<param\s+name="src"\s*value="([^"]+)', js_data)
+            stream_url += re.findall('file\s*:\s*[\'|\"](.+?)[\'|\"]', js_data)
+            stream_url = [i for i in stream_url if not i.endswith('.srt')]
+
+            if stream_url:
+                return stream_url[0]
+
+        raise ResolverError('Unable to find userfiles video')
+
     def get_url(self, host, media_id):
-        return 'http://usersfiles.com/%s' % (media_id)
+        return 'http://usersfiles.com/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

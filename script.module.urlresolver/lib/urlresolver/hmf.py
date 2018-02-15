@@ -71,7 +71,7 @@ class HostedMediaFile:
         '''
         if not url and not (host and media_id) or (url and (host or media_id)):
             raise ValueError('Set either url, or host AND media_id. No other combinations are valid.')
-        self._url = 'http:%s' % url if url.startswith("//") else url
+        self._url = url
         self._host = host
         self._media_id = media_id
         self._valid_url = None
@@ -102,22 +102,22 @@ class HostedMediaFile:
         resolvers = []
         for klass in klasses:
             if klass in resolver_cache:
-                common.logger.log_debug('adding resolver from cache: %s' % (klass))
+                common.log_utils.log_debug('adding resolver from cache: %s' % (klass))
                 resolvers.append(resolver_cache[klass])
             else:
-                common.logger.log_debug('adding resolver to cache: %s' % (klass))
+                common.log_utils.log_debug('adding resolver to cache: %s' % (klass))
                 resolver_cache[klass] = klass()
                 resolvers.append(resolver_cache[klass])
         return resolvers
     
     def __top_domain(self, url):
+        regex = "(\w{2,}\.\w{2,3}\.\w{2}|\w{2,}\.\w{2,3})$"
         elements = urlparse.urlparse(url)
         domain = elements.netloc or elements.path
         domain = domain.split('@')[-1].split(':')[0]
-        regex = "(?:www\.)?([\w\-]*\.[\w\-]{2,3}(?:\.[\w\-]{2,3})?)$"
         res = re.search(regex, domain)
-        if res: domain = res.group(1)
-        domain = domain.lower()
+        if res:
+            return res.group(1)
         return domain
 
     def get_url(self):
@@ -145,7 +145,7 @@ class HostedMediaFile:
         if validated: self.valid_url()
         return self.__resolvers
         
-    def resolve(self, include_universal=True, allow_popups=True):
+    def resolve(self, include_universal=True):
         '''
         Resolves this :class:`HostedMediaFile` to a media URL.
 
@@ -153,10 +153,6 @@ class HostedMediaFile:
 
             stream_url = HostedMediaFile(host='youtube.com', media_id='ABC123XYZ').resolve()
 
-        Args:
-            include_universal: if False, then universal resolvers are not allowed to be resolvers
-            allow_popups: If False, then any function dependent on a pop-up dialog (e.g. captcha, /pair, etc) will fail.
-            
         .. note::
 
             This method currently uses just the highest priority resolver to
@@ -169,25 +165,22 @@ class HostedMediaFile:
             A direct URL to the media file that is playable by XBMC, or False
             if this was not possible.
         '''
-        urlresolver.ALLOW_POPUPS = allow_popups
         for resolver in self.__resolvers:
             try:
                 if include_universal or not resolver.isUniversal():
                     if resolver.valid_url(self._url, self._host):
-                        common.logger.log_debug('Resolving using %s plugin' % (resolver.name))
+                        common.log_utils.log_debug('Resolving using %s plugin' % (resolver.name))
                         resolver.login()
                         self._host, self._media_id = resolver.get_host_and_id(self._url)
                         stream_url = resolver.get_media_url(self._host, self._media_id)
-                        if stream_url.startswith("//"): stream_url = 'http:%s' % stream_url
                         if stream_url and self.__test_stream(stream_url):
                             self.__resolvers = [resolver]  # Found a working resolver, throw out the others
                             self._valid_url = True
                             return stream_url
             except Exception as e:
-                url = self._url.encode('utf-8') if isinstance(self._url, unicode) else self._url
-                common.logger.log_error('%s Error - From: %s Link: %s: %s' % (type(e).__name__, resolver.name, url, e))
+                common.log_utils.log_error('%s Error - From: %s Link: %s: %s' % (type(e).__name__, resolver.name, self._url, e))
                 if resolver == self.__resolvers[-1]:
-                    common.logger.log_debug(traceback.format_exc())
+                    common.log_utils.log_debug(traceback.format_exc())
                     raise
 
         self.__resolvers = []  # No resolvers.
@@ -234,8 +227,8 @@ class HostedMediaFile:
         try: headers = dict([item.split('=') for item in (stream_url.split('|')[1]).split('&')])
         except: headers = {}
         for header in headers:
-            headers[header] = urllib.unquote_plus(headers[header])
-        common.logger.log_debug('Setting Headers on UrlOpen: %s' % (headers))
+            headers[header] = urllib.unquote(headers[header])
+        common.log_utils.log_debug('Setting Headers on UrlOpen: %s' % (headers))
 
         try:
             msg = ''
@@ -262,7 +255,7 @@ class HostedMediaFile:
         # added this log line for now so that we can catch any logs on streams that are rejected due to test_stream failures
         # we can remove it once we are sure this works reliably
         if int(http_code) >= 400:
-            common.logger.log_warning('Stream UrlOpen Failed: Url: %s HTTP Code: %s Msg: %s' % (stream_url, http_code, msg))
+            common.log_utils.log_warning('Stream UrlOpen Failed: Url: %s HTTP Code: %s Msg: %s' % (stream_url, http_code, msg))
 
         return int(http_code) < 400
 

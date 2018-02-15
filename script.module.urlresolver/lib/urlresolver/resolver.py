@@ -17,8 +17,6 @@
 This module defines the interfaces that you can implement when writing
 your URL resolving plugin.
 '''
-import os
-import re
 import abc
 from urlresolver import common
 
@@ -72,6 +70,7 @@ class UrlResolver(object):
         '''
         raise NotImplementedError
 
+    @abc.abstractmethod
     def get_host_and_id(self, url):
         '''
         The method that converts a host and media_id into a valid url
@@ -83,28 +82,19 @@ class UrlResolver(object):
             host (str): the host the link is on
             media_id (str): the media_id the can be returned by get_host_and_id
         '''
-        r = re.search(self.pattern, url, re.I)
-        if r:
-            return r.groups()
-        else:
-            return False
+        raise NotImplementedError
 
-    def valid_url(self, url, host):
+    @abc.abstractmethod
+    def valid_url(self, web_url, host):
         '''
         Determine whether this plugin is capable of resolving this URL. You must
         implement this method.
 
         Returns:
-            True if this plugin thinks it can handle the web_url or host
+            True if this plugin thinks it can hangle the web_url or host
             otherwise False.
         '''
-        if isinstance(host, basestring):
-            host = host.lower()
-        
-        if url:
-            return re.search(self.pattern, url, re.I) is not None
-        else:
-            return any(host in domain.lower() for domain in self.domains)
+        raise NotImplementedError
 
     @classmethod
     def isUniversal(cls):
@@ -123,7 +113,7 @@ class UrlResolver(object):
         return True
 
     @classmethod
-    def get_settings_xml(cls, include_login=True):
+    def get_settings_xml(cls):
         '''
         This method should return XML which describes the settings you would
         like for your plugin. You should make sure that the ``id`` starts
@@ -138,11 +128,9 @@ class UrlResolver(object):
             A list containing XML elements that will be valid in settings.xml
         '''
         xml = [
-            '<setting id="%s_priority" type="number" label="%s" default="100"/>' % (cls.__name__, common.i18n('priority')),
-            '<setting id="%s_enabled" ''type="bool" label="%s" default="true"/>' % (cls.__name__, common.i18n('enabled'))
+            '<setting id="%s_priority" type="number" label="Priority" default="100"/>' % (cls.__name__),
+            '<setting id="%s_enabled" ''type="bool" label="Enabled" default="true"/>' % (cls.__name__)
         ]
-        if include_login:
-            xml.append('<setting id="%s_login" ''type="bool" label="%s" default="true" visible="false"/>' % (cls.__name__, common.i18n('login')))
         return xml
 
     @classmethod
@@ -162,46 +150,3 @@ class UrlResolver(object):
     def _is_enabled(cls):
         # default behaviour is enabled is True if resolver is enabled, or has login set to "true", or doesn't have the setting
         return cls.get_setting('enabled') == 'true' and cls.get_setting('login') in ['', 'true']
-
-    def _get_host(self, host):
-        if '.' not in host:
-            for domain in self.domains:
-                if host in domain:
-                    return domain
-        
-        return host
-    
-    def _default_get_url(self, host, media_id, template=None):
-        if template is None: template = 'http://{host}/embed-{media_id}.html'
-        host = self._get_host(host)
-        return template.format(host=host, media_id=media_id)
-
-    @common.cache.cache_method(cache_limit=1)
-    def _auto_update(self, py_source, py_path, key=''):
-        try:
-            if self.get_setting('auto_update') == 'true' and py_source:
-                headers = self.net.http_HEAD(py_source).get_headers(as_dict=True)
-                common.logger.log(headers)
-                old_etag = self.get_setting('etag')
-                new_etag = headers.get('Etag', '')
-                old_len = common.file_length(py_path, key)
-                new_len = int(headers.get('Content-Length', 0))
-                py_name = os.path.basename(py_path)
-                
-                if old_etag != new_etag or old_len != new_len:
-                    common.logger.log('Updating %s: |%s|%s|%s|%s|' % (py_name, old_etag, new_etag, old_len, new_len))
-                    self.set_setting('etag', new_etag)
-                    new_py = self.net.http_GET(py_source).content
-                    if new_py:
-                        if key:
-                            new_py = common.decrypt_py(new_py, key)
-                            
-                        if new_py and 'import' in new_py:
-                            with open(py_path, 'w') as f:
-                                f.write(new_py)
-                            common.kodi.notify('%s %s' % (self.name, common.i18n('resolver_updated')))
-                else:
-                    common.logger.log('Reusing existing %s: |%s|%s|%s|%s|' % (py_name, old_etag, new_etag, old_len, new_len))
-                common.log_file_hash(py_path)
-        except Exception as e:
-            common.logger.log_warning('Exception during %s Auto-Update code retrieve: %s' % (self.name, e))

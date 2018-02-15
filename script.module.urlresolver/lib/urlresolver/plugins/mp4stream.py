@@ -15,8 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
+
 import re
-from lib import helpers
+import urllib
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 
@@ -30,13 +32,30 @@ class Mp4streamResolver(UrlResolver):
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.IE_USER_AGENT, 'Referer': web_url}
-        html = self.net.http_GET(web_url, headers=headers).content
-        url = re.findall('src\s*:\s*\'(.+?)\'', html)
-        if url:
-            return url[-1] + helpers.append_headers(headers)
-        else:
-            raise ResolverError('File not found')
+
+        response = self.net.http_GET(web_url)
+        html = response.content
+        headers = dict(response._response.info().items())
+
+        r = re.search('sources\s*:\s*(\[.*?\])', html, re.DOTALL)
+
+        if r:
+            html = r.group(1)
+            r = re.search("'file'\s*:\s*'(.+?)'", html)
+            if r:
+                return r.group(1) + '|' + urllib.urlencode({'Cookie': headers['set-cookie']})
+            else:
+                raise ResolverError('File Not Found or removed')
 
     def get_url(self, host, media_id):
         return 'http://mp4stream.com/embed/%s' % media_id
+
+    def get_host_and_id(self, url):
+        r = re.search(self.pattern, url)
+        if r:
+            return r.groups()
+        else:
+            return False
+
+    def valid_url(self, url, host):
+        return re.search(self.pattern, url) or self.name in host

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.kodil" name=".[COLOR blue]www.Kodisrael.co.il [/COLOR][COLOR white] Repository [/COLOR]" version="1.0.1" provider-name="kodil">
+    <extension point="xbmc.addon.repository" name="www.Kodisrael.co.il Repository ">
+        <info compressed="false">https://raw.githubusercontent.com/kodil/kodil/master/addons.xml</info>
+        <checksum>https://raw.githubusercontent.com/kodil/kodil/master/addons.xml.md5</checksum>
+        <datadir zip="true">https://raw.githubusercontent.com/kodil/kodil/master/repo</datadir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>www.kodisrael.co.il repository</summary>
+        <description>www.kodisrael.co.il offical repository </description>
+        <platform>all</platform>
+    </extension>
+</addon>

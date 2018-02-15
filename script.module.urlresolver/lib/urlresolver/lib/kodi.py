@@ -25,16 +25,12 @@ import urlparse
 import sys
 import os
 import re
-import time
-import strings
-import CustomProgressDialog
-import urlresolver
+import log_utils
 
 addon = xbmcaddon.Addon('script.module.urlresolver')
 get_setting = addon.getSetting
 show_settings = addon.openSettings
 sleep = xbmc.sleep
-_log = xbmc.log
 
 def get_path():
     return addon.getAddonInfo('path').decode('utf-8')
@@ -61,23 +57,6 @@ def get_name():
 def open_settings():
     return addon.openSettings()
 
-def get_keyboard(heading, default=''):
-    keyboard = xbmc.Keyboard()
-    keyboard.setHeading(heading)
-    if default: keyboard.setDefault(default)
-    keyboard.doModal()
-    if keyboard.isConfirmed():
-        return keyboard.getText()
-    else:
-        return None
-
-def i18n(string_id):
-    try:
-        return addon.getLocalizedString(strings.STRINGS[string_id]).encode('utf-8', 'ignore')
-    except Exception as e:
-        _log('Failed String Lookup: %s (%s)' % (string_id, e))
-        return string_id
- 
 def get_plugin_url(queries):
     try:
         query = urllib.urlencode(queries)
@@ -167,121 +146,3 @@ class WorkingDialog(object):
     
     def __exit__(self, type, value, traceback):
         xbmc.executebuiltin('Dialog.Close(busydialog)')
-
-def has_addon(addon_id):
-    return xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id) == 1
-
-class ProgressDialog(object):
-    def __init__(self, heading, line1='', line2='', line3='', background=False, active=True, timer=0):
-        self.begin = time.time()
-        self.timer = timer
-        self.background = background
-        self.heading = heading
-        if active and not timer:
-            self.pd = self.__create_dialog(line1, line2, line3)
-            self.pd.update(0)
-        else:
-            self.pd = None
-
-    def __create_dialog(self, line1, line2, line3):
-        if self.background:
-            pd = xbmcgui.DialogProgressBG()
-            msg = line1 + line2 + line3
-            pd.create(self.heading, msg)
-        elif urlresolver.ALLOW_POPUPS:
-            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
-                pd = CustomProgressDialog.ProgressDialog()
-            else:
-                pd = xbmcgui.DialogProgress()
-            pd.create(self.heading, line1, line2, line3)
-        else:
-            pd = None
-        return pd
-        
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, type, value, traceback):
-        if self.pd is not None:
-            self.pd.close()
-            del self.pd
-    
-    def is_canceled(self):
-        if self.pd is not None and not self.background:
-            return self.pd.iscanceled()
-        else:
-            return False
-        
-    def update(self, percent, line1='', line2='', line3=''):
-        if self.pd is None and self.timer and (time.time() - self.begin) >= self.timer:
-            self.pd = self.__create_dialog(line1, line2, line3)
-            
-        if self.pd is not None:
-            if self.background:
-                msg = line1 + line2 + line3
-                self.pd.update(percent, self.heading, msg)
-            else:
-                self.pd.update(percent, line1, line2, line3)
-
-class CountdownDialog(object):
-    __INTERVALS = 5
-    
-    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
-        self.heading = heading
-        self.countdown = countdown
-        self.interval = interval
-        self.line3 = line3
-        if active and urlresolver.ALLOW_POPUPS:
-            if xbmc.getCondVisibility('Window.IsVisible(progressdialog)'):
-                pd = CustomProgressDialog.ProgressDialog()
-            else:
-                pd = xbmcgui.DialogProgress()
-            if not self.line3: line3 = 'Expires in: %s seconds' % (countdown)
-            pd.create(self.heading, line1, line2, line3)
-            pd.update(100)
-            self.pd = pd
-        else:
-            self.pd = None
-
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, type, value, traceback):
-        if self.pd is not None:
-            self.pd.close()
-            del self.pd
-    
-    def start(self, func, args=None, kwargs=None):
-        if args is None: args = []
-        if kwargs is None: kwargs = {}
-        result = func(*args, **kwargs)
-        if result:
-            return result
-        
-        if self.pd is not None:
-            start = time.time()
-            expires = time_left = self.countdown
-            interval = self.interval
-            while time_left > 0:
-                for _ in range(CountdownDialog.__INTERVALS):
-                    sleep(interval * 1000 / CountdownDialog.__INTERVALS)
-                    if self.is_canceled(): return
-                    time_left = expires - int(time.time() - start)
-                    if time_left < 0: time_left = 0
-                    progress = time_left * 100 / expires
-                    line3 = 'Expires in: %s seconds' % (time_left) if not self.line3 else ''
-                    self.update(progress, line3=line3)
-                    
-                result = func(*args, **kwargs)
-                if result:
-                    return result
-    
-    def is_canceled(self):
-        if self.pd is None:
-            return False
-        else:
-            return self.pd.iscanceled()
-        
-    def update(self, percent, line1='', line2='', line3=''):
-        if self.pd is not None:
-            self.pd.update(percent, line1, line2, line3)
